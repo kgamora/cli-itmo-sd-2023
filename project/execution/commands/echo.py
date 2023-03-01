@@ -5,5 +5,6 @@ class Echo(Executable):
     def __init__(self):
         super().__init__()
 
+    @Executable._may_throw
     def execute(self, stdin: str):
-        return " ".join(self.arguments)
+        self.stdout = " ".join(self.arguments)

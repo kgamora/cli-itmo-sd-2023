@@ -7,5 +7,6 @@ class PWD(Executable):
     def __init__(self):
         super().__init__()
 
+    @Executable._may_throw
     def execute(self, stdin: str):
-        return os.getcwd()
+        self.stdout = os.getcwd()
