@@ -6,4 +6,4 @@ class Echo(Executable):
         super().__init__()
 
     def execute(self, stdin: str):
-        pass
+        return " ".join(self.arguments)
