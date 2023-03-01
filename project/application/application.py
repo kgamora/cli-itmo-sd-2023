@@ -27,6 +27,3 @@ class Application(metaclass=Singleton):
 
     def get_context_manager(self):
         return self.context_manager
-
-
-Application().run()
