@@ -1,3 +1,4 @@
 class Substituter:
     def substitute(self, tokens_str: str) -> str:
-        pass
+        # passing without substitute at part1 of project
+        return tokens_str
