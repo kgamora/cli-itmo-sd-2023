@@ -5,7 +5,7 @@ class Lexer:
 
     # Split input string with spaces and sign '='
     @staticmethod
-    def lex(self, tokens_str: str) -> list[str]:
+    def lex(tokens_str: str) -> list[str]:
         tokens = tokens_str.split()
         i = 0
         while i < len(tokens):
