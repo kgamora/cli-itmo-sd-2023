@@ -4,7 +4,6 @@ from project.execution.executable import Executable
 
 
 class PWD(Executable):
-
     def __init__(self):
         super().__init__()
 
