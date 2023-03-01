@@ -1,4 +1,4 @@
-from context_manager import ContextManager
+from project.application.context_manager import ContextManager
 from project.parsing.constructor import Constructor
 from project.parsing.lexer import Lexer
 from project.parsing.substituter import Substituter
