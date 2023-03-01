@@ -1,3 +1,5 @@
+import os
+
 from project.execution.executable import Executable
 
 
@@ -7,4 +9,4 @@ class PWD(Executable):
         super().__init__()
 
     def execute(self, stdin: str):
-        pass
+        return os.getcwd()
