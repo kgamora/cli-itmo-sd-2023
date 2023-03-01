@@ -17,4 +17,5 @@ class Executable(metaclass=ABCMeta):
                 execution(self, stdin)
             except BaseException as e:
                 self.stderr = str(e)
+
         return wrapper
