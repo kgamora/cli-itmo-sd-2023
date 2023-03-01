@@ -3,6 +3,7 @@ from project.parsing.constructor import Constructor
 from project.parsing.lexer import Lexer
 from project.parsing.substituter import Substituter
 from project.utils.metaclasses import Singleton
+from project.execution.executable import Executable
 
 
 class Application(metaclass=Singleton):
@@ -13,10 +14,7 @@ class Application(metaclass=Singleton):
         while True:
             try:
                 stdin = input()
-                substitution_str = Substituter.substitute(stdin)
-                tokens = Lexer.lex(substitution_str)
-                executors = Constructor.construct(tokens)
-
+                executors = self.get_executors(stdin)
                 out = None
                 for executor in executors:
                     out = executor.exec(out)
@@ -24,6 +22,11 @@ class Application(metaclass=Singleton):
             except Exception as e:
                 print(type(e))
                 break
+
+    def get_executors(self, stdin: str) -> Executable:
+        substitution_str = Substituter.substitute(stdin)
+        tokens = Lexer.lex(substitution_str)
+        return Constructor.construct(tokens)
 
     def get_context_manager(self):
         return self.context_manager
