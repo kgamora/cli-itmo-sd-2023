@@ -26,10 +26,7 @@ class Application(metaclass=Singleton):
     def get_executables(self, stdin: str) -> list[Executable]:
         substitution_cmd = Substituter.substitute(stdin)
         tokens = Lexer.lex(substitution_cmd)
-        executables = []
-        for token in tokens:
-            executables.append(Constructor().construct(token))
-        return executables
+        yield Constructor().construct(tokens)
 
     def get_context_manager(self):
         return self.context_manager
