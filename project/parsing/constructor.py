@@ -23,6 +23,12 @@ class Constructor:
 
         return self.map_of_executables[tokens_list[0]](tokens_list[1:])
 
+    def construct_all(self, tokens_lists: list[list[str]]) -> list[Executable | None]:
+        if len(tokens_lists) == 0:
+            return []
+        for tokens_list in tokens_lists:
+            yield self.construct(tokens_list)
+
     def _construct_global_executable(self, tokens_list: list[str]):
         return GlobalExecutor(tokens_list)
 
