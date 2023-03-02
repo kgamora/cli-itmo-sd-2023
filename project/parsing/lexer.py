@@ -21,4 +21,5 @@ class Lexer:
                     + tokens
                     + tokens[i + 1 :]
                 )
+            i += 1
         return tokens

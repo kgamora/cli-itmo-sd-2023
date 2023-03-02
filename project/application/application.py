@@ -16,12 +16,13 @@ class Application(metaclass=Singleton):
             try:
                 stdin = input()
                 executables = self.get_executables(stdin)
-                ans = Executor.exec(executables)
-                if ans.code != 0:
-                    raise Exception
-            except:
-                print(ans.stderr)
-                return ans.code
+                report = Executor.exec(executables)
+                if report.stdout and len(report.stdout) > 0:
+                    print(report.stdout)
+                if report.stderr and len(report.stderr) > 0:
+                    print(report.stderr)
+            except Exception as e:
+                print(e)
 
     def get_executables(self, stdin: str) -> list[Executable]:
         substitution_cmd = Substituter.substitute(stdin)

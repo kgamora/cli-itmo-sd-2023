@@ -7,15 +7,14 @@ from project.execution.commands.exit import Exit
 
 class Constructor:
     def __init__(self):
-
         self._executable_constructions_keyword = "_construct_"
         self.map_of_executables: dict = {}
         self.map_of_executables.setdefault(self._construct_global_executable)
-        for k, v in self.__dict__:
+        for k in self.__dir__():
             if k.startswith(self._executable_constructions_keyword):
                 self.map_of_executables[
                     k.removeprefix(self._executable_constructions_keyword)
-                ] = v
+                ] = getattr(self, k)
 
     def construct(self, tokens_list: list[str]) -> Executable | None:
         if len(tokens_list) == 0:

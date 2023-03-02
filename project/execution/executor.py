@@ -1,16 +1,16 @@
-from project.execution.exceptions.exception_exec import ExceptionExec
+from project.execution.executor_report import ExecutorReport
 from project.execution.executable import Executable
 
 
 class Executor:
     @staticmethod
-    def exec(executables: list[Executable]) -> ExceptionExec:
-        stdout, stderr, ret_code = None, None, 0
+    def exec(executables: list[Executable]) -> ExecutorReport:
+        report = ExecutorReport("", "", 0)
         for executable in executables:
-            executable.execute(stdout)
-            stdout = executable.stdout
-            stderr = executable.stderr
-            ret_code = executable.ret_code
-            if ret_code != 0:
+            executable.execute(report.stdout)
+            report = ExecutorReport(
+                executable.stdout, executable.stderr, executable.ret_code
+            )
+            if report.ret_code != 0:
                 break
-        return ExceptionExec(stdout, stderr, ret_code)
+        return report
