@@ -14,18 +14,19 @@ class Application(metaclass=Singleton):
         while True:
             try:
                 stdin = input()
-                executors = self.get_executors(stdin)
+                commands = stdin.split("|")
                 out = None
-                for executor in executors:
+                for command in commands:
+                    executor = self.get_executors(command)
                     out = executor.exec(out)
 
             except Exception as e:
                 print(type(e))
                 break
 
-    def get_executors(self, stdin: str) -> Executable:
-        substitution_str = Substituter.substitute(stdin)
-        tokens = Lexer.lex(substitution_str)
+    def get_executors(self, command: str) -> Executable:
+        substitution_cmd = Substituter.substitute(command)
+        tokens = Lexer.lex(substitution_cmd)
         return Constructor.construct(tokens)
 
     def get_context_manager(self):
