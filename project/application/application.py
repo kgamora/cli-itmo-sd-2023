@@ -27,7 +27,7 @@ class Application(metaclass=Singleton):
         tokens = Lexer.lex(substitution_cmd)
         executables = []
         for token in tokens:
-            executables.append(Constructor.construct(token))
+            executables.append(Constructor.construct(tokens))
         return executables
 
     def get_context_manager(self):
