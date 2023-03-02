@@ -16,18 +16,19 @@ class Application(metaclass=Singleton):
             try:
                 stdin = input()
                 executables = self.get_executables(stdin)
-                Executor.exec(executables)
-
-            except Exception as e:
-                print(type(e))
-                break
+                ans = Executor.exec(executables)
+                if ans.code != 0:
+                    raise Exception
+            except:
+                print(ans.stderr)
+                return ans.code
 
     def get_executables(self, stdin: str) -> list[Executable]:
         substitution_cmd = Substituter.substitute(stdin)
         tokens = Lexer.lex(substitution_cmd)
         executables = []
         for token in tokens:
-            executables.append(Constructor.construct(tokens))
+            executables.append(Constructor().construct(token))
         return executables
 
     def get_context_manager(self):
