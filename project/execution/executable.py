@@ -10,3 +10,12 @@ class Executable(metaclass=ABCMeta):
     @abstractmethod
     def execute(self, stdin: str):
         pass
+
+    def _may_throw(execution: callable):
+        def wrapper(self: Executable, stdin: str):
+            try:
+                execution(self, stdin)
+            except BaseException as e:
+                self.stderr = str(e)
+
+        return wrapper
