@@ -1,4 +1,5 @@
 from project.application.context_manager import ContextManager
+from project.execution.executor import Executor
 from project.parsing.constructor import Constructor
 from project.parsing.lexer import Lexer
 from project.parsing.substituter import Substituter
@@ -14,23 +15,20 @@ class Application(metaclass=Singleton):
         while True:
             try:
                 stdin = input()
-                commands = stdin.split("|")
-                out = None
-                for command in commands:
-                    executor = self.get_executors(command)
-                    out = executor.exec(out)
+                executables = self.get_executables(stdin)
+                Executor.exec(executables)
 
             except Exception as e:
                 print(type(e))
                 break
 
-    def get_executors(self, command: str) -> Executable:
-        substitution_cmd = Substituter.substitute(command)
+    def get_executables(self, stdin: str) -> list[Executable]:
+        substitution_cmd = Substituter.substitute(stdin)
         tokens = Lexer.lex(substitution_cmd)
-        return Constructor.construct(tokens)
+        executables = []
+        for token in tokens:
+            executables.append(Constructor.construct(token))
+        return executables
 
     def get_context_manager(self):
         return self.context_manager
-
-
-Application().run()
