@@ -1,6 +1,36 @@
 from project.execution.executable import Executable
+from project.execution.commands.global_executable import GlobalExecutor
+from project.execution.commands.echo import Echo
+from project.execution.commands.pwd import PWD
+from project.execution.commands.exit import Exit
 
 
 class Constructor:
-    def construct(self, tokens_list: list[str]) -> Executable:
-        pass
+    def __init__(self):
+        self._executable_constructions_keyword = '_construct_'
+        self.map_of_executables: dict = {}
+        self.map_of_executables.setdefault(self._construct_global_executable)
+        for k, v in self.__dict__:
+            if k.startswith(self._executable_constructions_keyword):
+                self.map_of_executables[k.removeprefix(self._executable_constructions_keyword)] = v
+
+    def construct(self, tokens_list: list[str]) -> Executable | None:
+        if len(tokens_list) == 0:
+            return None
+        if len(tokens_list) > 1 and tokens_list[1] == '=':
+            # return Assigner
+            pass
+
+        return self.map_of_executables[tokens_list[0]](tokens_list[1:])
+
+    def _construct_global_executable(self, tokens_list: list[str]):
+        return GlobalExecutor(tokens_list)
+
+    def _construct_echo(self, tokens_list: list[str]):
+        return Echo(tokens_list)
+
+    def _construct_pwd(self, tokens_list: list[str]):
+        return PWD(tokens_list)
+
+    def _construct_exit(self, tokens_list: list[str]):
+        return Exit(tokens_list)

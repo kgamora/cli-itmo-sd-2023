@@ -2,8 +2,8 @@ from abc import ABCMeta, abstractmethod
 
 
 class Executable(metaclass=ABCMeta):
-    def __init__(self):
-        self.arguments: list[str] | None = None
+    def __init__(self, arguments: list[str] | None):
+        self.arguments: list[str] | None = arguments
         self.stdout: str | None = None
         self.stderr: str | None = None
         self.ret_code: int | None = None
