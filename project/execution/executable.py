@@ -3,9 +3,10 @@ from abc import ABCMeta, abstractmethod
 
 class Executable(metaclass=ABCMeta):
     def __init__(self):
-        self.arguments: list[str]
-        self.stdout: str
-        self.stderr: str
+        self.arguments: list[str] = []
+        self.stdout: str = ''
+        self.stderr: str = ''
+        self.ret_code: int = 1
 
     @abstractmethod
     def execute(self, stdin: str):
