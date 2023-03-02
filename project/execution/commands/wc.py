@@ -7,7 +7,7 @@ class WC(Executable):
     def __init__(self, arguments: list[str] | None = None):
         super().__init__(arguments)
 
-    #    @Executable._may_throw
+    @Executable._may_throw
     def execute(self, stdin: str = ""):
         self.print_if(stdin and len(stdin) != 0, stdin)
         max_len, total_line, total_word, total_byte = 0, 0, 0, 0
