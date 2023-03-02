@@ -5,7 +5,7 @@ from project.execution.executable import Executable
 class Executor:
     @staticmethod
     def exec(executables: list[Executable]) -> ExceptionExec:
-        stdout, stderr, ret_code = None
+        stdout, stderr, ret_code = None, None, 0
         for executable in executables:
             executable.execute(stdout)
             stdout = executable.stdout
