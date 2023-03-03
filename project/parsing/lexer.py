@@ -12,13 +12,16 @@ class Lexer:
             new_tokens = tokens[i].split("=")
             if len(new_tokens) > 2:
                 raise LexerAssignException()
-            if len(new_tokens) > 1:
+            if (
+                len(new_tokens) > 1
+                and len(new_tokens[0]) > 0
+                and len(new_tokens[1]) > 0
+            ):
                 tokens = (
                     tokens[0:i]
-                    + new_tokens[0]
+                    + [new_tokens[0]]
                     + ["="]
-                    + new_tokens[1]
-                    + tokens
+                    + [new_tokens[1]]
                     + tokens[i + 1 :]
                 )
             i += 1

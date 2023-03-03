@@ -20,8 +20,7 @@ class Constructor:
         if len(tokens_list) == 0:
             return None
         if len(tokens_list) > 1 and tokens_list[1] == "=":
-            # return Assigner
-            pass
+            return Assign(tokens_list[0:1] + tokens_list[2:])
 
         return self.map_of_executables[tokens_list[0]](tokens_list[1:])
 

@@ -10,11 +10,7 @@ class Substituter:
 
         result = tokens_str
         try:
-            result = re.sub(r'"(.*)"', r"\1", tokens_str)
-        except Exception as e:
-            None
-        try:
-            result = re.sub(r'"(.*)"', r"\1", tokens_str)
+            result = re.sub(r"'(.*)'", r"\1", tokens_str)
         except Exception as e:
             None
 
