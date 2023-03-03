@@ -27,7 +27,10 @@ class Application(metaclass=Singleton):
     def get_executables(self, stdin: str) -> list[Executable]:
         substitution_cmd = Substituter.substitute(stdin)
         tokens = Lexer.lex(substitution_cmd)
-        yield Constructor().construct(tokens)
+        constructor = Constructor()
+        executable = constructor.construct(tokens)
+        if executable:
+            yield executable
 
     def get_context_manager(self):
         return self.context_manager
