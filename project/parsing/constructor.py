@@ -1,3 +1,4 @@
+from project.execution.commands.assign import Assign
 from project.execution.executable import Executable
 from project.execution.commands.global_executable import GlobalExecutor
 from project.execution.commands.echo import Echo
