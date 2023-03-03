@@ -1,4 +1,5 @@
 from project.execution.commands.assign import Assign
+from project.execution.commands.cat import Cat
 from project.execution.commands.wc import WC
 from project.execution.executable import Executable
 from project.execution.commands.global_executable import GlobalExecutor
@@ -48,3 +49,6 @@ class Constructor:
 
     def _construct_wc(self, tokens: list[str]):
         return WC(tokens)
+
+    def _construct_cat(self, tokens: list[str]):
+        return Cat(tokens)
