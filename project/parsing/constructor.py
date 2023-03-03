@@ -1,4 +1,5 @@
 from project.execution.commands.assign import Assign
+from project.execution.commands.wc import WC
 from project.execution.executable import Executable
 from project.execution.commands.global_executable import GlobalExecutor
 from project.execution.commands.echo import Echo
@@ -10,7 +11,6 @@ class Constructor:
     def __init__(self):
         self._executable_constructions_keyword = "_construct_"
         self.map_of_executables: dict = {}
-        self.map_of_executables.setdefault(self._construct_global_executable)
         for k in self.__dir__():
             if k.startswith(self._executable_constructions_keyword):
                 self.map_of_executables[
@@ -23,7 +23,10 @@ class Constructor:
         if len(tokens_list) > 1 and tokens_list[1] == "=":
             return Assign(tokens_list[0:1] + tokens_list[2:])
 
-        return self.map_of_executables[tokens_list[0]](tokens_list[1:])
+        if tokens_list[0] in self.map_of_executables.keys():
+            return self.map_of_executables[tokens_list[0]](tokens_list[1:])
+        else:
+            return self._construct_global_executable(tokens_list)
 
     def construct_all(self, tokens_lists: list[list[str]]) -> list[Executable | None]:
         if len(tokens_lists) == 0:
@@ -42,3 +45,6 @@ class Constructor:
 
     def _construct_exit(self, tokens_list: list[str]):
         return Exit(tokens_list)
+
+    def _construct_wc(self, tokens: list[str]):
+        return WC(tokens)
