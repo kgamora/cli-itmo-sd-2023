@@ -6,6 +6,12 @@ from project.execution.executable import Executable
 class WC(Executable):
     def __init__(self, arguments: list[str] | None = None):
         super().__init__(arguments)
+        self.stdout = ""
+        self.stderr = ""
+        self.max_len = 0
+        self.total_line = 0
+        self.total_word = 0
+        self.total_byte = 0
 
     @Executable._may_throw
     def execute(self, stdin: str = ""):
@@ -16,39 +22,48 @@ class WC(Executable):
         :return: None
         """
         self.__print_if(stdin and len(stdin) != 0, stdin)
-        max_len, total_line, total_word, total_byte = 0, 0, 0, 0
-        output = []
-        for argument in self.arguments:
-            if self.__is_file(argument):
-                count_new_line, count_words, size = self.__get_info_about_file(argument)
-                total_line += count_new_line
-                total_word += count_words
-                total_byte += size
-                max_len = max(max_len, len(str(total_byte)))
-                output.append({"file": (count_new_line, count_words, size, argument)})
-            elif self.__is_dir(argument):
-                output.append({"dir": "wc:" + str(argument) + ": Это каталог"})
-                output.append({"file": (0, 0, 0, argument)})
-        offset = str((max_len // 8 + 1) * 8)
+        output, offset = self.__get_info()
         template = (
             "{:" + offset + "d}{:" + offset + "d}{:" + offset + "d} {:" + offset + "s}"
         )
         for out in output:
             if "dir" in out:
-                print(out["dir"])
+                self.stdout += out["dir"] + "\n"
             if "file" in out:
-                print(template.format(*out["file"]))
+                self.stdout += template.format(*out["file"]) + "\n"
         if len(self.arguments) != 1:
-            print(template.format(total_line, total_word, total_byte, "итого"))
+            self.stdout += template.format(
+                self.total_line, self.total_word, self.total_byte, "итого"
+            )
+
+    def __get_info(self):
+        output = []
+        for argument in self.arguments:
+            if self.__is_file(argument):
+                count_new_line, count_words, size = self.__get_info_about_file(argument)
+                self.total_line += count_new_line
+                self.total_word += count_words
+                self.total_byte += size
+                max_len = max(self.max_len, len(str(self.total_byte)))
+                output.append({"file": (count_new_line, count_words, size, argument)})
+            elif self.__is_dir(argument):
+                output.append({"dir": "wc:" + str(argument) + ": Это каталог"})
+                output.append({"file": (0, 0, 0, argument)})
+            else:
+                output.append(
+                    {"dir": "wc: " + str(argument) + ": Нет такого файла или каталога"}
+                )
+        offset = str((self.max_len // 6 + 1) * 6)
+        return output, offset
 
     def __print_if(self, logic: bool, stdin: str):
         if logic:
-            self.__print_stdin(stdin)
+            self.__save_stdin(stdin)
 
-    def __print_stdin(self, stdin: str):
+    def __save_stdin(self, stdin: str):
         count = len(stdin.strip().split())
         bytes = len(stdin.encode("utf-8"))
-        print("{:8d}{:8d}{:8d}".format(1, count, bytes + 1))
+        self.stdout += "{:8d}{:8d}{:8d}".format(1, count, bytes + 1)
 
     def __is_file(self, name: str):
         return os.path.isfile(name)
