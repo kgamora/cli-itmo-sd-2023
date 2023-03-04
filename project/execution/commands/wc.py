@@ -29,7 +29,7 @@ class WC(Executable):
             elif self.__is_dir(argument):
                 output.append({"dir": "wc:" + str(argument) + ": Это каталог"})
                 output.append({"file": (0, 0, 0, argument)})
-        offset = str((max_len // 2 + 1) * 2)
+        offset = str((max_len // 8 + 1) * 8)
         template = (
             "{:" + offset + "d}{:" + offset + "d}{:" + offset + "d} {:" + offset + "s}"
         )
