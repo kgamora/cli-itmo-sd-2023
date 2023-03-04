@@ -25,4 +25,4 @@ def test_ls():
     filename = os.path.basename(__file__)
     print(filename)
     print(ge.stdout)
-    assert ge.stdout.__contains__(filename) or ge.stdout.__contains__('README.md')
+    assert ge.stdout.__contains__(filename) or ge.stdout.__contains__("README.md")
