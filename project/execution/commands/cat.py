@@ -2,11 +2,11 @@ from project.execution.executable import Executable
 
 
 class Cat(Executable):
-    def __init__(self, arguments: list[str] | None = None):
+    def __init__(self, arguments: list[str] | None = []):
         super().__init__(arguments)
 
     @Executable._may_throw
-    def execute(self, stdin: str):
+    def execute(self, stdin: str = ""):
         """
         Executes the command and captures its output (stdout, stderr and return code).
         Concatenate files to stdout like cat command in standard Linux distros but lacks its flags.

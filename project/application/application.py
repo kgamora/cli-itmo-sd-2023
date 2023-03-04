@@ -8,8 +8,8 @@ from project.execution.executable import Executable
 
 
 class Application(metaclass=Singleton):
-    _STDERROR_COLOR_BEGIN = '\033[91m'
-    _STDERROR_COLOR_END = '\033[0m'
+    _STDERROR_COLOR_BEGIN = "\033[91m"
+    _STDERROR_COLOR_END = "\033[0m"
 
     def __init__(self):
         self.context_manager = ContextManager()
@@ -27,7 +27,11 @@ class Application(metaclass=Singleton):
                 if report.stdout and len(report.stdout) > 0:
                     print(report.stdout)
                 if report.stderr and len(report.stderr) > 0:
-                    print(self._STDERROR_COLOR_BEGIN, report.stderr, self._STDERROR_COLOR_END)
+                    print(
+                        self._STDERROR_COLOR_BEGIN,
+                        report.stderr,
+                        self._STDERROR_COLOR_END,
+                    )
             except KeyboardInterrupt:
                 exit(0)
             except Exception as e:

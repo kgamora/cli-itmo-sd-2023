@@ -18,7 +18,7 @@ class Executable(metaclass=ABCMeta):
         pass
 
     def _may_throw(execution: callable):
-        def wrapper(self: Executable, stdin: str):
+        def wrapper(self: Executable, stdin: str = ""):
             try:
                 execution(self, stdin)
                 self.ret_code = 0

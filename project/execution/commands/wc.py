@@ -13,7 +13,7 @@ class WC(Executable):
         if not self.arguments:
             self.arguments = []
 
-    # @Executable._may_throw
+    @Executable._may_throw
     def execute(self, stdin: str = ""):
         """
         Executes the command and captures its output (stdout, stderr and return code).
