@@ -14,3 +14,4 @@ class Echo(Executable):
         :return: None
         """
         self.stdout = " ".join(self.arguments)
+        self.ret_code = 0

@@ -13,9 +13,10 @@ class Cat(Executable):
         :param stdin: command input stream
         :return: None
         """
-        if not self.stdout:
-            self.stdout = ""
-        for file_name in self.arguments:
-            with open(file_name) as file:
-                self.stdout += "".join([line for line in file])
+        if not self.arguments:
+            self.stdout += stdin
+        else:
+            for file_name in self.arguments:
+                with open(file_name) as file:
+                    self.stdout += "".join([line for line in file])
         self.ret_code = 0
