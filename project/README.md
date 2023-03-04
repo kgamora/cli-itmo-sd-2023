@@ -12,3 +12,12 @@ pre-commit run --all-files
 # Try our command line interface!
 python -m project
 ```
+
+
+#### Запуск тестов
+```shell
+# Запуск тестов
+cd ..
+python -m pytest
+cd project
+```
