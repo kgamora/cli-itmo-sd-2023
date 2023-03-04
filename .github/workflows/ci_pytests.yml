@@ -1,14 +1,6 @@
 name: Run tests with pytest
 
-on:
-  push:
-    branches:
-      - 'main'
-      - 'cli-setup'
-      - 'dev-part-1'
-  pull_request:
-    branches:
-      - 'main'
+on: [ push ]
 
 jobs:
   test:
