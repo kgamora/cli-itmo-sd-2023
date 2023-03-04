@@ -32,10 +32,11 @@ class WC(Executable):
                 self.stdout += out["dir"] + "\n"
             if "file" in out:
                 self.stdout += template.format(*out["file"]) + "\n"
-        if len(self.arguments) != 0:
+        if len(self.arguments) > 1:
             self.stdout += template.format(
                 self.total_line, self.total_word, self.total_byte, "итого"
             )
+        self.stdout = self.stdout[:-1]
         self.ret_code = 0
 
     def __get_info(self):

@@ -44,4 +44,4 @@ def test_file_exists():
 def test_file_not_exists():
     cat = Cat([FILE_NAME_NOT_EXISTS])
     cat.execute("")
-    assert cat.stderr is not None
+    assert cat.stderr != ""
