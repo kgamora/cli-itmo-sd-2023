@@ -8,7 +8,7 @@ def setup_module(module):
 
 
 def teardown_module(module):
-    print("test passed")
+    print("teardown module")
 
 
 def test_exit():
