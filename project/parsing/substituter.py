@@ -14,10 +14,18 @@ class Substituter:
         except Exception as e:
             None
 
+        result: str
+
+        if len(tokens_str) > 1 and tokens_str[0] == "'" and tokens_str[-1] == "'":
+            result = tokens_str[1:-1]
+        else:
+            result = re.sub(r'"(.*)"', r"\1", tokens_str)
+            # here needs substitution
+
         return result
 
     @staticmethod
-    def substitute_all(tokens_strings: list[str]) -> str:
+    def substitute_all(token_strings: list[str]) -> list[str]:
         # passing without substitute at part1 of project
         for tok in tokens_strings:
             yield Substituter.substitute(tok)

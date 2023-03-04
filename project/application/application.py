@@ -25,10 +25,13 @@ class Application(metaclass=Singleton):
                 print(e)
 
     def get_executables(self, stdin: str) -> list[Executable]:
-        substitution_cmd = Substituter.substitute(stdin)
-        tokens = Lexer.lex(substitution_cmd)
+        tokens = Lexer.lex(stdin)
+        substituted_tokens = [i for i in Substituter.substitute_all(tokens)]
+        # Here need add splitting tokens by pipes
+        # And insert construction at cycle
+
         constructor = Constructor()
-        executable = constructor.construct(tokens)
+        executable = constructor.construct(substituted_tokens)
         if executable:
             yield executable
 
