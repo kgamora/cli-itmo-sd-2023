@@ -3,7 +3,7 @@
 #
 # Copyleft (c) by Egor Ovchinnikov 2023.
 #
-name: My-Run-Tests
+name: Ci-Pytests
 
 on: [ push ]
 
