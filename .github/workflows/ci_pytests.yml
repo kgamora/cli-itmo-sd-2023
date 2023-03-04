@@ -3,10 +3,12 @@ name: Run tests with pytest
 on:
   push:
     branches:
-      - '!main'
+      - 'main'
+      - 'cli-setup'
+      - 'dev-part-1'
   pull_request:
     branches:
-      - '!main'
+      - 'main'
 
 jobs:
   test:
@@ -33,4 +35,4 @@ jobs:
           pip list
 
       - name: Run tests with pytest
-        run: python ./test/run_tests.py
+        run: python -m pytest
