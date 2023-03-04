@@ -1,5 +1,6 @@
 import subprocess
 
+from project.application.context_manager import ContextManager
 from project.execution.executable import Executable
 from subprocess import CompletedProcess
 
@@ -16,8 +17,12 @@ class GlobalExecutor(Executable):
         :param stdin: command input stream
         :return: None
         """
+        context_manager = ContextManager()
         completedProcess: CompletedProcess = subprocess.run(
-            args=self.arguments, capture_output=True, universal_newlines=True
+            args=self.arguments,
+            capture_output=True,
+            universal_newlines=True,
+            env=context_manager.get_current_env(),
         )
         self.ret_code, self.stdout, self.stderr = (
             completedProcess.returncode,
