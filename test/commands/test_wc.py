@@ -18,12 +18,12 @@ def test_stdin():
     test_example = "Andhra Pradesh\nArunachal Pradesh\nAssam Bihar\nChhattisgarh"
     wc.execute(test_example)
     assert wc.stderr is None
-    assert wc.stdout == "5  7 58"
+    assert wc.stdout == "      4       7      58"
     assert wc.ret_code == 0
 
 
 def test_from_file():
-    wc = WC(["capitals.txt"])
+    wc = WC(["./capitals.txt"])
     capitals: list[str] = ["Hyderabad", "Itanagar", "Dispur", "Patna", "Raipur"]
     with open("capital.txt", "w+") as file:
         for capital in capitals:

@@ -6,14 +6,14 @@ from project.execution.executable import Executable
 class WC(Executable):
     def __init__(self, arguments: list[str] | None = None):
         super().__init__(arguments)
-        self.stdout = ""
-        self.stderr = ""
         self.max_len = 0
         self.total_line = 0
         self.total_word = 0
         self.total_byte = 0
+        if not self.arguments:
+            self.arguments = []
 
-    @Executable._may_throw
+    # @Executable._may_throw
     def execute(self, stdin: str = ""):
         """
         Executes the command and captures its output (stdout, stderr and return code).
@@ -21,6 +21,7 @@ class WC(Executable):
         :param stdin: command input stream
         :return: None
         """
+        self.stdout = ""
         self.__print_if(stdin and len(stdin) != 0, stdin)
         output, offset = self.__get_info()
         template = (
@@ -31,10 +32,11 @@ class WC(Executable):
                 self.stdout += out["dir"] + "\n"
             if "file" in out:
                 self.stdout += template.format(*out["file"]) + "\n"
-        if len(self.arguments) != 1:
+        if len(self.arguments) != 0:
             self.stdout += template.format(
                 self.total_line, self.total_word, self.total_byte, "итого"
             )
+        self.ret_code = 0
 
     def __get_info(self):
         output = []
@@ -61,9 +63,10 @@ class WC(Executable):
             self.__save_stdin(stdin)
 
     def __save_stdin(self, stdin: str):
+        new_lines = len(stdin.strip().split("\n"))
         count = len(stdin.strip().split())
         bytes = len(stdin.encode("utf-8"))
-        self.stdout += "{:8d}{:8d}{:8d}".format(1, count, bytes + 1)
+        self.stdout += "{:7d}{:8d}{:8d}".format(new_lines, count, bytes + 1)
 
     def __is_file(self, name: str):
         return os.path.isfile(name)
