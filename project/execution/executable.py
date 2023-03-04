@@ -21,9 +21,8 @@ class Executable(metaclass=ABCMeta):
         def wrapper(self: Executable, stdin: str = ""):
             try:
                 execution(self, stdin)
-                self.ret_code = 0
             except BaseException as e:
                 self.stderr += str(e)
-                self.ret_code = 1
+                self.ret_code = 2
 
         return wrapper
