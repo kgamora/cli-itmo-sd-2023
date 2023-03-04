@@ -17,15 +17,15 @@ class GlobalExecutor(Executable):
         :param stdin: command input stream
         :return: None
         """
-        context_manager = ContextManager()
-        completedProcess: CompletedProcess = subprocess.run(
+        completed_process: CompletedProcess = subprocess.run(
+            input=stdin,
             args=self.arguments,
             capture_output=True,
             universal_newlines=True,
-            env=context_manager.get_current_env(),
+            env=ContextManager().get_current_env(),
         )
         self.ret_code, self.stdout, self.stderr = (
-            completedProcess.returncode,
-            completedProcess.stdout,
-            completedProcess.stderr,
+            completed_process.returncode,
+            completed_process.stdout,
+            completed_process.stderr,
         )
