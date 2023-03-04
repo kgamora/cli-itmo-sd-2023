@@ -17,7 +17,7 @@ class GlobalExecutor(Executable):
         :return: None
         """
         completedProcess: CompletedProcess = subprocess.run(
-            args=self.arguments, capture_output=True
+            args=self.arguments, capture_output=True, universal_newlines=True
         )
         self.ret_code, self.stdout, self.stderr = (
             completedProcess.returncode,
