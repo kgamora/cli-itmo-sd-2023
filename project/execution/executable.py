@@ -4,8 +4,8 @@ from abc import ABCMeta, abstractmethod
 class Executable(metaclass=ABCMeta):
     def __init__(self, arguments: list[str] | None):
         self.arguments: list[str] | None = arguments
-        self.stdout: str | None = None
-        self.stderr: str | None = None
+        self.stdout: str | None = ""
+        self.stderr: str | None = ""
         self.ret_code: int | None = None
 
     @abstractmethod
@@ -23,7 +23,7 @@ class Executable(metaclass=ABCMeta):
                 execution(self, stdin)
                 self.ret_code = 0
             except BaseException as e:
-                self.stderr = str(e)
+                self.stderr += str(e)
                 self.ret_code = 1
 
         return wrapper
