@@ -1,7 +1,3 @@
-import os
-
-import pytest
-import project  # on import will print something from __init__ file
 from project.execution.commands.pwd import *
 
 

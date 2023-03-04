@@ -16,3 +16,4 @@ class PWD(Executable):
         :return: None
         """
         self.stdout = os.getcwd()
+        self.ret_code = 0
