@@ -1,4 +1,5 @@
 from project.parsing.exceptions.LexingException import LexerAssignException
+import shlex
 
 
 class Lexer:

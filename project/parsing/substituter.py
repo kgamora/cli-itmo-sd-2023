@@ -5,7 +5,7 @@ class Substituter:
 
     # Replace names of environment vars in input string
     @staticmethod
-    def substitute(tokens_str: str) -> str:
+    def substitute(token: str) -> str:
         # passing without substitute at part1 of project
 
         result = tokens_str
@@ -16,10 +16,10 @@ class Substituter:
 
         result: str
 
-        if len(tokens_str) > 1 and tokens_str[0] == "'" and tokens_str[-1] == "'":
-            result = tokens_str[1:-1]
+        if len(token) > 1 and token[0] == "'" and token[-1] == "'":
+            result = token[1:-1]
         else:
-            result = re.sub(r'"(.*)"', r"\1", tokens_str)
+            result = re.sub(r'"(.*)"', r"\1", token)
             # here needs substitution
 
         return result
@@ -27,5 +27,5 @@ class Substituter:
     @staticmethod
     def substitute_all(token_strings: list[str]) -> list[str]:
         # passing without substitute at part1 of project
-        for tok in tokens_strings:
+        for tok in token_strings:
             yield Substituter.substitute(tok)
