@@ -33,7 +33,7 @@ jobs:
           pip list
 
       - name: Run tests with pytest
-        run: python ./test/run_tests.py
+        run: python -m pytest
 
       - name: Run tests with unittest
         run: python -m unittest discover -f test -v
