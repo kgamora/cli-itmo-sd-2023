@@ -12,26 +12,6 @@ class Substituter:
         """
         # passing without substitute at part1 of project
 
-        from project.application.context_manager import ContextManager
-
-        # def get_var_value(name):
-        #     v = ContextManager().get_var(str(name)[1:])
-        #     return v
-        #
-        # def find_strings_to_substitute(sub_text):
-        #     v = str(re.sub(r'\$\b\w*', get_var_value, str(sub_text)))
-        #     return v
-        #
-        # try:
-        #     # result = re.sub(r'[^\']*".*(\$\b\w*).*"[^\']*', find_strings_to_substitute, tokens_str)
-        #     # result = re.sub(r'[^\']*.*(\$\b\w*).*[^\']*', find_strings_to_substitute, tokens_str)
-        #     # result = re.sub(r'[^\']*(\$\b\w*)[^\']*', find_strings_to_substitute, tokens_str)
-        #
-        #     result = re.sub(r'"(.*)"', r'\1', result)
-        #     result = re.sub(r"'(.*)'", r'\1', result)
-        # except Exception as e:
-        #     pass
-
         result: str
 
         if len(token) > 1 and token[0] == "'" and token[-1] == "'":
