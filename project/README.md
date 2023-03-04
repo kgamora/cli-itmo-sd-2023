@@ -9,7 +9,7 @@ pre-commit run --all-files
 
 #### Запуск приложения CLI
 ```
-# Try our shell!
+# Try our command line interface!
 python -m project
 ```
 
