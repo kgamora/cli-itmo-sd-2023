@@ -36,7 +36,7 @@ class WC(Executable):
             self.stdout += template.format(
                 self.total_line, self.total_word, self.total_byte, "итого"
             )
-        self.stdout = self.stdout[:-1]
+        self.stdout = self.stdout.removesuffix("\n")
         self.ret_code = 0
 
     def __get_info(self):
