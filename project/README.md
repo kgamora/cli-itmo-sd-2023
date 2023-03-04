@@ -12,4 +12,3 @@ pre-commit run --all-files
 # Try our command line interface!
 python -m project
 ```
-
