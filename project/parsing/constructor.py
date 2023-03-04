@@ -46,8 +46,7 @@ class Constructor:
         """
         if len(tokens_lists) == 0:
             return []
-        for tokens_list in tokens_lists:
-            yield self.construct(tokens_list)
+        return list(map(self.construct, tokens_lists))
 
     def _construct_global_executable(self, tokens_list: list[str]):
         return GlobalExecutor(tokens_list)

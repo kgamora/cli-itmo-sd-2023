@@ -29,5 +29,4 @@ class Substituter:
         :param token_strings:
         :return: return list of substituted strings
         """
-        for tok in token_strings:
-            yield Substituter.substitute(tok)
+        return list(map(Substituter.substitute, token_strings))
