@@ -10,6 +10,10 @@ from project.execution.commands.exit import Exit
 
 class Constructor:
     def __init__(self):
+        """
+        Private methods to construct Executable with 'name'
+            must be named "_construct_'name'"
+        """
         self._executable_constructions_keyword = "_construct_"
         self.map_of_executables: dict = {}
         for k in self.__dir__():
@@ -19,6 +23,11 @@ class Constructor:
                 ] = getattr(self, k)
 
     def construct(self, tokens_list: list[str]) -> Executable | None:
+        """
+        Constructs from list of tokens instance of Executable
+        :param tokens_list: input list of tokens
+        :return: Executable
+        """
         if len(tokens_list) == 0:
             return None
         if len(tokens_list) > 1 and tokens_list[1] == "=":
@@ -30,6 +39,11 @@ class Constructor:
             return self._construct_global_executable(tokens_list)
 
     def construct_all(self, tokens_lists: list[list[str]]) -> list[Executable | None]:
+        """
+        Construct several Executable from list of strings.
+        :param tokens_lists:
+        :return: list of Executable
+        """
         if len(tokens_lists) == 0:
             return []
         for tokens_list in tokens_lists:
