@@ -17,7 +17,5 @@ python -m project
 #### Запуск тестов
 ```shell
 # Запуск тестов
-cd ..
-python -m pytest
-cd project
+cd .. && python -m pytest && cd project
 ```
