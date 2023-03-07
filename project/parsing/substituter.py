@@ -1,4 +1,5 @@
 import re
+from project.application.context_manager import ContextManager
 
 
 class Substituter:
@@ -17,8 +18,17 @@ class Substituter:
         if len(token) > 1 and token[0] == "'" and token[-1] == "'":
             result = token[1:-1]
         else:
-            result = re.sub(r'"(.*)"', r"\1", token)
-            # here needs substitution
+            # here is substitution
+            def get_var_value(name):
+                v = ContextManager().get_var(str(name)[1:])
+                return v
+
+            def find_strings_to_substitute(sub_text):
+                v = str(re.sub(r"\$\b\w*", get_var_value, str(sub_text)))
+                return v
+
+            result = re.sub(r'"(.*)"', find_strings_to_substitute, result)
+
 
         return result
 
