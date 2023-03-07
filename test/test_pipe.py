@@ -15,13 +15,14 @@ def teardown_module(module):
 
 FILE_IN = str(pathlib.Path(__file__).parent) + "/test_in.txt"
 FILE_OUT = str(pathlib.Path(__file__).parent) + "/test_out.txt"
-TEST_TEXT_IN = ["echo 'hello world' | cat\n", "echo 'alone' | cat\n"]
+TEST_TEXT_IN = ["echo 'hello world' | cat\n",
+                "echo 'alone' | cat\n"]
 TEST_TEXT_OUT = ["hello world\n", "alone\n"]
 
 
-def init_files():
+def init_files(input_list: list[str]=TEST_TEXT_IN):
     i = open(FILE_IN, "w")
-    i.write("".join(TEST_TEXT_IN))
+    i.write("".join(input_list))
     i.write("exit")
 
 
@@ -31,9 +32,16 @@ def delete_files():
 
 
 class ModuleTest:
-    def __init__(self):
+    def __init__(self, input_str=None):
+        self.out = None
+        self.i = None
+        self.tmp_out = None
+        self.tmp_in = None
         self.app = Application()
-        init_files()
+        if input_str:
+            init_files(input_str)
+        else:
+            init_files()
 
     def change_streams(self):
         self.tmp_in = sys.stdin
@@ -66,4 +74,23 @@ def test_easy():
     test.return_streams()
     with open(FILE_OUT) as f:
         for out_app, out in zip(f.readlines(), TEST_TEXT_OUT):
+            assert out_app == out
+
+
+def test_some_inputs():
+    test = ModuleTest(
+        [
+            "var='sdf|fds'\n",
+            "echo $var\n",
+        ]
+    )
+    test.change_streams()
+    test.run()
+    test.return_streams()
+    with open(FILE_OUT) as f:
+        for out_app, out in zip(f.readlines(),
+                                [
+                                    "sdf|fds\n",
+                                    
+                                ]):
             assert out_app == out

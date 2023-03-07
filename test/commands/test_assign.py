@@ -19,9 +19,22 @@ def test_throws():
 
 
 def test_basic():
+    ContextManager()._clear()
     var, val = "var", "val"
     assert not ContextManager().get_var(var)
     assign = Assign([var, val])
     assign.execute("")
     assert ContextManager().get_var(var) == val
     assert not assign.stdout
+    ContextManager()._clear()
+
+
+def test_string_assign():
+    ContextManager()._clear()
+    var, val = "var", "'sdf|fds'"
+    assert not ContextManager().get_var(var)
+    assign = Assign([var, val])
+    assign.execute("")
+    assert ContextManager().get_var(var) == val
+    assert not assign.stdout
+    ContextManager()._clear()

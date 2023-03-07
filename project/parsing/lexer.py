@@ -20,9 +20,9 @@ class Lexer:
             while i < len(tokens):
                 if (
                     tokens[i][0] == "'"
-                    or tokens[i][-1] == "'"
+                    and tokens[i][-1] == "'"
                     or tokens[i][0] == '"'
-                    or tokens[i][-1] == '"'
+                    and tokens[i][-1] == '"'
                 ):
                     i += 1
                     continue
