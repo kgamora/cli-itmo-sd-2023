@@ -29,7 +29,6 @@ class Substituter:
 
             result = re.sub(r'"(.*)"', find_strings_to_substitute, result)
 
-
         return result
 
     @staticmethod
