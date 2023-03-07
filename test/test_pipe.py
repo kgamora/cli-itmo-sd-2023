@@ -3,6 +3,7 @@ import pathlib
 import sys
 
 from project.application.application import Application
+from project.application.context_manager import ContextManager
 
 
 def setup_module(module):
@@ -36,6 +37,7 @@ class ModuleTest:
         self.i = None
         self.tmp_out = None
         self.tmp_in = None
+        ContextManager()._clear()
         self.app = Application()
         if input_str:
             init_files(input_str)
