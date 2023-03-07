@@ -1,13 +1,82 @@
 import shlex
+from abc import ABCMeta, abstractmethod
+
 from project.parsing.exceptions.LexingException import (
     LexerException,
     LexerAssignException,
 )
 
 
-class Lexer:
+class LexerAction(metaclass=ABCMeta):
+    @abstractmethod
+    def perform(self, tokens_list: list[str]):
+        pass
+
     @staticmethod
-    def lex(tokens_str: str) -> list[str]:
+    def is_string(line):
+        return line[0] == "'" and line[-1] == "'" or line[0] == '"' and line[-1] == '"'
+
+
+class SeparateAssign(LexerAction):
+    def perform(self, tokens: list[str]):
+        i = 0
+        while i < len(tokens):
+            if self.is_string(tokens[i]):
+                i += 1
+                continue
+
+            new_tokens = tokens[i].split("=")
+
+            if len(new_tokens) > 2:
+                raise LexerAssignException()
+            if (
+                len(new_tokens) > 1
+                and len(new_tokens[0]) > 0
+                and len(new_tokens[1]) > 0
+            ):
+                tokens = (
+                    tokens[0:i] + [new_tokens[0], "=", new_tokens[1]] + tokens[i + 1 :]
+                )
+            i += 1
+
+        return tokens
+
+
+class SeparatePipe(LexerAction):
+
+    pipe = "|"
+
+    def perform(self, tokens: list[str]):
+        i = 0
+        while i < len(tokens):
+            if self.is_string(tokens[i]) or tokens[i] == self.pipe:
+                i += 1
+                continue
+
+            new_tokens = tokens[i].split(self.pipe)
+            if len(new_tokens) > 2:
+                raise LexerAssignException()
+            if len(new_tokens) > 1:
+                median = [new_tokens[0]] if len(new_tokens[0]) > 0 else []
+                for tok in new_tokens[1:]:
+                    median += [self.pipe, tok] if len(tok) > 0 else [self.pipe]
+                tokens = tokens[0:i] + median + tokens[i + 1 :]
+                continue
+            i += 1
+        return tokens
+
+
+class Lexer:
+    _actions = [SeparateAssign(), SeparatePipe()]
+
+    def __init__(self, actions: list[LexerAction] = None):
+        if actions:
+            self.actions = actions
+        else:
+            self.actions = Lexer._actions
+
+    @classmethod
+    def lex(cls, tokens_str: str) -> list[str]:
         """
         Split input string with spaces and signs '=', '|' if it not in quotes.
         :param tokens_str: input string
@@ -15,35 +84,10 @@ class Lexer:
         """
         try:
             tokens = shlex.split(tokens_str, posix=False)
-
-            i = 0
-            while i < len(tokens):
-                if (
-                    tokens[i][0] == "'"
-                    and tokens[i][-1] == "'"
-                    or tokens[i][0] == '"'
-                    and tokens[i][-1] == '"'
-                ):
-                    i += 1
-                    continue
-
-                new_tokens = tokens[i].split("=")
-                if len(new_tokens) > 2:
-                    raise LexerAssignException()
-                if (
-                    len(new_tokens) > 1
-                    and len(new_tokens[0]) > 0
-                    and len(new_tokens[1]) > 0
-                ):
-                    tokens = (
-                        tokens[0:i]
-                        + [new_tokens[0]]
-                        + ["="]
-                        + [new_tokens[1]]
-                        + tokens[i + 1 :]
-                    )
-                i += 1
-
         except ValueError as error:
             raise LexerException(error)
+
+        for action in cls._actions:
+            tokens = action.perform(tokens)
+
         return tokens
