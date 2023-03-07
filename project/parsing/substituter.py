@@ -13,19 +13,27 @@ class Substituter:
         """
         # passing without substitute at part1 of project
 
-        result: str
+        result: str = token
 
         if len(token) > 1 and token[0] == "'" and token[-1] == "'":
             result = token[1:-1]
         else:
+            result = re.sub(r'"(.*)"', r"\1", token)
+
             # here is substitution
-            def get_var_value(name):
-                v = ContextManager().get_var(str(name)[1:])
-                return v
+            def get_var_value(name: re.Match):
+                key = name[0]
+                v = ContextManager().get_var(key[1:])
+                return v[0:]
 
             def find_strings_to_substitute(sub_text):
-                v = str(re.sub(r"\$\b\w*", get_var_value, str(sub_text)))
-                return v
+                v = re.sub(r"(\$\b\w*)", get_var_value, sub_text)
+                s = sub_text
+                return str(v[0:])
+            #
+
+            result = re.sub(r'(\$\b\w*)', get_var_value, result)
+            # result = str(re.sub(r'"(.*)"', r"\1", token))
 
             result = re.sub(r'"(.*)"', find_strings_to_substitute, result)
 
