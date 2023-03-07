@@ -5,6 +5,7 @@ from project.parsing.lexer import Lexer
 from project.parsing.substituter import Substituter
 from project.utils.metaclasses import Singleton
 from project.execution.executable import Executable
+from project.utils.parserutils import split
 
 
 class Application(metaclass=Singleton):
@@ -43,15 +44,18 @@ class Application(metaclass=Singleton):
         :param stdin: user input to parse
         :return: list of commands to execute
         """
-        tokens = Lexer.lex(stdin)
-        substituted_tokens = Substituter.substitute_all(tokens)
+        tokens: list[str] = Lexer.lex(stdin)
+        substituted_tokens: list[str] = Substituter.substitute_all(tokens)
+        substituted_tokens_list: list[str] = split(substituted_tokens, "|")
+
         # Here need add splitting tokens by pipes
         # And insert construction at cycle
 
         constructor = Constructor()
-        executable = constructor.construct(substituted_tokens)
-        if executable:
-            yield executable
+        for substituted_tokens in substituted_tokens_list:
+            executable = constructor.construct(substituted_tokens)
+            if executable:
+                yield executable
 
     def get_context_manager(self):
         return self.context_manager
