@@ -15,12 +15,11 @@ def teardown_module(module):
 
 FILE_IN = str(pathlib.Path(__file__).parent) + "/test_in.txt"
 FILE_OUT = str(pathlib.Path(__file__).parent) + "/test_out.txt"
-TEST_TEXT_IN = ["echo 'hello world' | cat\n",
-                "echo 'alone' | cat\n"]
+TEST_TEXT_IN = ["echo 'hello world' | cat\n", "echo 'alone' | cat\n"]
 TEST_TEXT_OUT = ["hello world\n", "alone\n"]
 
 
-def init_files(input_list: list[str]=TEST_TEXT_IN):
+def init_files(input_list: list[str] = TEST_TEXT_IN):
     i = open(FILE_IN, "w")
     i.write("".join(input_list))
     i.write("exit")
@@ -88,9 +87,62 @@ def test_some_inputs():
     test.run()
     test.return_streams()
     with open(FILE_OUT) as f:
-        for out_app, out in zip(f.readlines(),
-                                [
-                                    "sdf|fds\n",
-                                    
-                                ]):
+        for out_app, out in zip(
+            f.readlines(),
+            [
+                "sdf|fds\n",
+            ],
+        ):
+            assert out_app == out
+
+
+def test_empty():
+    test = ModuleTest(
+        [
+            "echo 'fff' | echo\n",
+        ]
+    )
+    test.change_streams()
+    test.run()
+    test.return_streams()
+    with open(FILE_OUT) as f:
+        for out_app, out in zip(f.readlines(), [""]):
+            assert out_app == out
+
+
+def test_empty():
+    test = ModuleTest(
+        [
+            "echo 'fff' | echo\n",
+        ]
+    )
+    test.change_streams()
+    test.run()
+    test.return_streams()
+    with open(FILE_OUT) as f:
+        for out_app, out in zip(f.readlines(), [""]):
+            assert out_app == out
+
+
+def test_empty():
+    test = ModuleTest(
+        [
+            "echo 'fff' | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat\n"
+        ]
+    )
+    test.change_streams()
+    test.run()
+    test.return_streams()
+    with open(FILE_OUT) as f:
+        for out_app, out in zip(f.readlines(), ["fff\n"]):
+            assert out_app == out
+
+
+def test_without_space():
+    test = ModuleTest(["echo 'F'|cat\n"])
+    test.change_streams()
+    test.run()
+    test.return_streams()
+    with open(FILE_OUT) as f:
+        for out_app, out in zip(f.readlines(), ["F\n"]):
             assert out_app == out
