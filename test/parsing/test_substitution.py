@@ -24,16 +24,14 @@ def test_double_quotes():
     assert Substituter.substitute('"a | b"') == "a | b"
 
 
-context = ContextManager()
-context.set_var("name", "world")
-context.set_var("x", "3")
-context.set_var("y", "4")
-
-
 def test_easy():
+    ContextManager().set_var("name", "world")
+    ContextManager().set_var("x", "3")
+    ContextManager().set_var("y", "4")
     assert "Hello, world" == Substituter.substitute("Hello, $name")
     assert "3+4=7" == Substituter.substitute("$x+$y=7")
     assert "world 34" == Substituter.substitute("$name $x$y")
+    ContextManager()._clear()
 
 
 def test_not_exists_substitution():

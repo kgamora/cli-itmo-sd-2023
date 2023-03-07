@@ -26,7 +26,7 @@ class Substituter:
                 v = ContextManager().get_var(key[1:])
                 return v
 
-            result = re.sub(r'(\$\b\w*)', get_var_value, result)
+            result = re.sub(r"(\$\b\w*)", get_var_value, result)
 
         return result
 

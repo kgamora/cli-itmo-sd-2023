@@ -27,6 +27,12 @@ class ContextManager(metaclass=Singleton):
         """
         self.__var_map[name_str] = value_str
 
+    def remove_var(self, name_str: str):
+        self.__var_map.pop(name_str, "")
+
+    def _clear(self):
+        self.__var_map.clear()
+
     def get_current_env(self) -> dict[str, str]:
         """
         Combines system variables and current context variables and returns them
