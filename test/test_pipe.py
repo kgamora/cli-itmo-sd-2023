@@ -1,4 +1,6 @@
-import sys, os, pathlib
+import os
+import pathlib
+import sys
 
 from project.application.application import Application
 
