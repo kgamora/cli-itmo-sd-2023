@@ -15,16 +15,14 @@ def teardown_module(module):
 
 FILE_IN = str(pathlib.Path(__file__).parent) + "/test_in.txt"
 FILE_OUT = str(pathlib.Path(__file__).parent) + "/test_out.txt"
-TEST_TEXT_IN = "echo 'hello world' | cat\n"
-TEST_TEXT_OUT = "hello world"
+TEST_TEXT_IN = "echo 'hello world' | cat\necho 'alone' | cat\n"
+TEST_TEXT_OUT = ["hello world\n", "alone\n"]
 
 
 def init_files():
     i = open(FILE_IN, "w")
     i.write(TEST_TEXT_IN)
     i.write("exit")
-    out = open(FILE_OUT, "w")
-    out.write(TEST_TEXT_OUT)
 
 
 def delete_files():
@@ -67,5 +65,5 @@ def test_easy():
     test.run()
     test.return_streams()
     with open(FILE_OUT) as f:
-        for i in f.readlines():
-            assert i == TEST_TEXT_OUT + "\n"
+        for out_app, out in zip(f.readlines(), TEST_TEXT_OUT):
+            assert out_app == out
