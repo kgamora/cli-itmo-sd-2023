@@ -111,20 +111,16 @@ def test_empty():
 
 
 def test_empty():
-    test = ModuleTest(
-        [
-            "echo 'fff' | echo\n",
-        ]
-    )
+    test = ModuleTest(["echo 'fff' | echo\n", "var=123 | echo $var | cat\n"])
     test.change_streams()
     test.run()
     test.return_streams()
     with open(FILE_OUT) as f:
-        for out_app, out in zip(f.readlines(), [""]):
+        for out_app, out in zip(f.readlines(), ["", ""]):
             assert out_app == out
 
 
-def test_empty():
+def test_many_cat():
     test = ModuleTest(
         [
             "echo 'fff' | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat\n"
