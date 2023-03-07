@@ -11,9 +11,9 @@ class Substituter:
         :param token: string
         :return: string with substitution
         """
-        # passing without substitute at part1 of project
+        # passing with substitute at part2 of project
 
-        result: str = token
+        result: str
 
         if len(token) > 1 and token[0] == "'" and token[-1] == "'":
             result = token[1:-1]
@@ -24,18 +24,9 @@ class Substituter:
             def get_var_value(name: re.Match):
                 key = name[0]
                 v = ContextManager().get_var(key[1:])
-                return v[0:]
-
-            def find_strings_to_substitute(sub_text):
-                v = re.sub(r"(\$\b\w*)", get_var_value, sub_text)
-                s = sub_text
-                return str(v[0:])
-            #
+                return v
 
             result = re.sub(r'(\$\b\w*)', get_var_value, result)
-            # result = str(re.sub(r'"(.*)"', r"\1", token))
-
-            result = re.sub(r'"(.*)"', find_strings_to_substitute, result)
 
         return result
 
