@@ -18,7 +18,7 @@ class Application(metaclass=Singleton):
     def run(self):
         """
         Read-Execute-Print Loop
-        :return:
+        :return: None
         """
         while True:
             try:
@@ -40,7 +40,7 @@ class Application(metaclass=Singleton):
 
     def get_executables(self, stdin: str) -> list[Executable]:
         """
-        Converts input string to list of Executables
+        Converts input string into list of Executables
         :param stdin: user input to parse
         :return: list of commands to execute
         """
@@ -58,4 +58,8 @@ class Application(metaclass=Singleton):
                 yield executable
 
     def get_context_manager(self):
+        """
+        returns application's context manager
+        :return:
+        """
         return self.context_manager

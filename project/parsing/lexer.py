@@ -10,6 +10,11 @@ from project.parsing.exceptions.LexingException import (
 class LexerAction(metaclass=ABCMeta):
     @abstractmethod
     def perform(self, tokens_list: list[str]):
+        """
+        Auxiliary lexing method. Performs one of the lexing stages.
+        :param tokens: list of tokens
+        :return: list of tokens
+        """
         pass
 
     @staticmethod
@@ -19,6 +24,11 @@ class LexerAction(metaclass=ABCMeta):
 
 class SeparateAssign(LexerAction):
     def perform(self, tokens: list[str]):
+        """
+        Auxiliary lexing method. Performs separation by equals sign.
+        :param tokens: list of tokens
+        :return: list of tokens
+        """
         i = 0
         while i < len(tokens):
             if self.is_string(tokens[i]):
@@ -47,6 +57,11 @@ class SeparatePipe(LexerAction):
     pipe = "|"
 
     def perform(self, tokens: list[str]):
+        """
+        Auxiliary lexing method. Performs separation by pipe sign.
+        :param tokens: list of tokens
+        :return: list of tokens
+        """
         i = 0
         while i < len(tokens):
             if self.is_string(tokens[i]) or tokens[i] == self.pipe:
@@ -78,7 +93,7 @@ class Lexer:
     @classmethod
     def lex(cls, tokens_str: str) -> list[str]:
         """
-        Split input string with spaces and signs '=', '|' if it not in quotes.
+        Split the input string by whitespace and '=', '|' signs if it is not surrounded with single-quotes.
         :param tokens_str: input string
         :return: list of tokens
         """
