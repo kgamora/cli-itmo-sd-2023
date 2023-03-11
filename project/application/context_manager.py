@@ -28,6 +28,11 @@ class ContextManager(metaclass=Singleton):
         self.__var_map[name_str] = value_str
 
     def remove_var(self, name_str: str):
+        """
+        removes variable name_str from shell context (Note: it cannot remove variable from system context)
+        :param name_str: name of the variable to remove from shell context
+        :return: None
+        """
         self.__var_map.pop(name_str, "")
 
     def _clear(self):
