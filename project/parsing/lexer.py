@@ -9,7 +9,7 @@ from project.parsing.exceptions.LexingException import (
 
 class LexerAction(metaclass=ABCMeta):
     @abstractmethod
-    def perform(self, tokens_list: list[str]):
+    def perform(self, tokens: list[str]) -> list[str]:
         """
         Auxiliary lexing method. Performs one of the lexing stages.
         :param tokens: list of tokens
@@ -40,12 +40,12 @@ class SeparateAssign(LexerAction):
             if len(new_tokens) > 2:
                 raise LexerAssignException()
             if (
-                len(new_tokens) > 1
-                and len(new_tokens[0]) > 0
-                and len(new_tokens[1]) > 0
+                    len(new_tokens) > 1
+                    and len(new_tokens[0]) > 0
+                    and len(new_tokens[1]) > 0
             ):
                 tokens = (
-                    tokens[0:i] + [new_tokens[0], "=", new_tokens[1]] + tokens[i + 1 :]
+                        tokens[0:i] + [new_tokens[0], "=", new_tokens[1]] + tokens[i + 1:]
                 )
             i += 1
 
@@ -53,7 +53,6 @@ class SeparateAssign(LexerAction):
 
 
 class SeparatePipe(LexerAction):
-
     pipe = "|"
 
     def perform(self, tokens: list[str]):
@@ -75,7 +74,7 @@ class SeparatePipe(LexerAction):
                 median = [new_tokens[0]] if len(new_tokens[0]) > 0 else []
                 for tok in new_tokens[1:]:
                     median += [self.pipe, tok] if len(tok) > 0 else [self.pipe]
-                tokens = tokens[0:i] + median + tokens[i + 1 :]
+                tokens = tokens[0:i] + median + tokens[i + 1:]
                 continue
             i += 1
         return tokens

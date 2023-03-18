@@ -48,9 +48,6 @@ class Application(metaclass=Singleton):
         substituted_tokens: list[str] = Substituter.substitute_all(tokens)
         substituted_tokens_list: list[str] = split(substituted_tokens, "|")
 
-        # Here need add splitting tokens by pipes
-        # And insert construction at cycle
-
         constructor = Constructor()
         for substituted_tokens in substituted_tokens_list:
             executable = constructor.construct(substituted_tokens)
