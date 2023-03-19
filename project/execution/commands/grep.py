@@ -9,8 +9,8 @@ class Grep(Executable):
 
     def _init_args(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument('-w', default=None)
-        parser.add_argument('-A', default=None)
+        parser.add_argument('-w', default=False)
+        parser.add_argument('-A', default=False)
         parser.add_argument('-i', action='store_const', default=False, const=True)
         return parser.parse_args(self.arguments)
 
@@ -26,7 +26,7 @@ class Grep(Executable):
         self.stdout = " ".join(self.arguments)
         self.ret_code = 0
 
-#
-# test = Grep(["-w", "word", "-A", "10"])
-#
-# test.execute(None)
+
+test = Grep(["-w", "word", "-A", "10"])
+
+test.execute(None)
