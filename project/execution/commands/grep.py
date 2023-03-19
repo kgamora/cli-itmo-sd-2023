@@ -1,5 +1,6 @@
 from project.execution.executable import Executable
 import argparse
+import regex
 from os.path import isfile
 
 
@@ -33,8 +34,16 @@ class Grep(Executable):
     def _get_patten_for_case_insensitive(self, pattern: str):
         return f'{pattern}//i'
 
-    def _find_by_regex(self, pattern: str, text: str, additional_lines_number: int):
-        pass
+
+    def _find_by_regex(self, pattern: str, target: str, additional_lines_number: int):
+        matches = regex.match(pattern=pattern, string=target)
+        result = list()
+        for left, right in matches.spans(1):
+            if additional_lines_number == 0:
+                result.append(target[left:right])
+            else:
+                result.append("".join(target[left:].splitlines(keepends=True)[:right + 1]))
+        return result
 
     @Executable._may_throw
     def execute(self, stdin: str):
@@ -45,7 +54,7 @@ class Grep(Executable):
         :return: None
         """
         pattern = self._init_pattern()
-        lines_number = self.arg.A
+        lines_number = self.args.A
         for file in self.args.tail:
             if isfile(file):
                 content = Grep._get_file_text(file)
@@ -54,11 +63,9 @@ class Grep(Executable):
         self.stdout = " ".join(self.arguments)
         self.ret_code = 0
 
-    def _get_func(self, name):
-        return
-
     @staticmethod
     def _get_file_text(file_name):
         with open(file_name, 'r') as content_file:
             content = content_file.read()
         return content
+
