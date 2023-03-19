@@ -16,6 +16,9 @@ class Grep(Executable):
         parser.add_argument('files', metavar='N', type=str, nargs='+')
         return parser.parse_args(self.arguments)
 
+    def _find_by_regex(self, pattern:str, text:str, additional_lines_number:int):
+        pass
+
     @Executable._may_throw
     def execute(self, stdin: str):
         """
