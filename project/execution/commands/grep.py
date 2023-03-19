@@ -27,13 +27,13 @@ class Grep(Executable):
         for file in self.args.files:
             if isfile(file):
                 content = Grep._get_file_text(file)
+                print(content)
 
         self.stdout = " ".join(self.arguments)
         self.ret_code = 0
 
     @staticmethod
     def _get_file_text(file_name):
-        content = ""
         with open(file_name, 'r') as content_file:
             content = content_file.read()
         return content
