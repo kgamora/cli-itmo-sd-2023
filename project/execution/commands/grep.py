@@ -1,5 +1,6 @@
 from project.execution.executable import Executable
 import argparse
+from os.path import isfile
 
 
 class Grep(Executable):
@@ -12,7 +13,7 @@ class Grep(Executable):
         parser.add_argument('-w', default=False)
         parser.add_argument('-A', default=False)
         parser.add_argument('-i', action='store_const', default=False, const=True)
-        parser.add_argument('tail', metavar='N', type=str, nargs='+')
+        parser.add_argument('files', metavar='N', type=str, nargs='+')
         return parser.parse_args(self.arguments)
 
     @Executable._may_throw
@@ -23,13 +24,21 @@ class Grep(Executable):
         :param stdin: command input stream
         :return: None
         """
-        print(self.args)
+        for file in self.args.files:
+            if isfile(file):
+                content = Grep._get_file_text(file)
+
         self.stdout = " ".join(self.arguments)
         self.ret_code = 0
 
-    # def _get_file_text(self):
+    @staticmethod
+    def _get_file_text(file_name):
+        content = ""
+        with open(file_name, 'r') as content_file:
+            content = content_file.read()
+        return content
 
 
-test = Grep(["-w", "word", "file", "file", "file", "file"])
+test = Grep(["-w", "word", "grep.py", "exit.py", "file", "file"])
 
 test.execute(None)
