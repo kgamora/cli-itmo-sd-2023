@@ -10,13 +10,30 @@ class Grep(Executable):
 
     def _init_args(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument('-w', default=False)
-        parser.add_argument('-A', default=False)
-        parser.add_argument('-i', action='store_const', default=False, const=True)
-        parser.add_argument('files', metavar='N', type=str, nargs='+')
+        parser.add_argument('-w', default=None)
+        parser.add_argument('-A', default=0)
+        parser.add_argument('-i', action='store_const', default=None, const=True)
+        parser.add_argument('tail', metavar='N', type=str, nargs='+')
         return parser.parse_args(self.arguments)
 
-    def _find_by_regex(self, pattern:str, text:str, additional_lines_number:int):
+    def _init_pattern(self):
+        pattern = ""
+        if self.args.w is not None:
+            pattern = self._get_patten_for_word(self.args.w)
+        else:
+            pattern = self.args.tail[0]
+            self.args.tail = self.args.tail[1:]
+        if self.args.i is not None:
+            pattern = self._get_patten_for_case_insensitive(pattern)
+        return pattern
+
+    def _get_patten_for_word(self, word: str):
+        return f'(\W|^){word}($|\W)'
+
+    def _get_patten_for_case_insensitive(self, pattern: str):
+        return f'{pattern}//i'
+
+    def _find_by_regex(self, pattern: str, text: str, additional_lines_number: int):
         pass
 
     @Executable._may_throw
@@ -27,21 +44,21 @@ class Grep(Executable):
         :param stdin: command input stream
         :return: None
         """
-        for file in self.args.files:
+        pattern = self._init_pattern()
+        lines_number = self.arg.A
+        for file in self.args.tail:
             if isfile(file):
                 content = Grep._get_file_text(file)
-                print(content)
+                self._find_by_regex(pattern, content, lines_number)
 
         self.stdout = " ".join(self.arguments)
         self.ret_code = 0
+
+    def _get_func(self, name):
+        return
 
     @staticmethod
     def _get_file_text(file_name):
         with open(file_name, 'r') as content_file:
             content = content_file.read()
         return content
-
-
-test = Grep(["-w", "word", "grep.py", "exit.py", "file", "file"])
-
-test.execute(None)
