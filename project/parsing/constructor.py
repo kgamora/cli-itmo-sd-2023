@@ -6,6 +6,7 @@ from project.execution.commands.global_executable import GlobalExecutor
 from project.execution.commands.echo import Echo
 from project.execution.commands.pwd import PWD
 from project.execution.commands.exit import Exit
+from project.execution.commands.grep import Grep
 
 
 class Constructor:
@@ -65,3 +66,6 @@ class Constructor:
 
     def _construct_cat(self, tokens: list[str]):
         return Cat(tokens)
+
+    def _construct_grep(self, tokens: list[str]):
+        return Grep(tokens)
