@@ -12,6 +12,7 @@ class Grep(Executable):
         parser.add_argument('-w', default=False)
         parser.add_argument('-A', default=False)
         parser.add_argument('-i', action='store_const', default=False, const=True)
+        parser.add_argument('tail', metavar='N', type=str, nargs='+')
         return parser.parse_args(self.arguments)
 
     @Executable._may_throw
@@ -26,7 +27,9 @@ class Grep(Executable):
         self.stdout = " ".join(self.arguments)
         self.ret_code = 0
 
+    # def _get_file_text(self):
 
-test = Grep(["-w", "word", "-A", "10"])
+
+test = Grep(["-w", "word", "file", "file", "file", "file"])
 
 test.execute(None)
