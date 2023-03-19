@@ -1,6 +1,6 @@
 from project.execution.executable import Executable
 import argparse
-import regex
+import re
 from os.path import isfile
 
 
@@ -11,10 +11,10 @@ class Grep(Executable):
 
     def _init_args(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument('-w', default=None)
-        parser.add_argument('-A', default=0)
-        parser.add_argument('-i', action='store_const', default=None, const=True)
-        parser.add_argument('tail', metavar='N', type=str, nargs='+')
+        parser.add_argument("-w", default=None)
+        parser.add_argument("-A", default=0)
+        parser.add_argument("-i", action="store_const", default=None, const=True)
+        parser.add_argument("tail", metavar="N", type=str, nargs="+")
         return parser.parse_args(self.arguments)
 
     def _init_pattern(self):
@@ -29,20 +29,24 @@ class Grep(Executable):
         return pattern
 
     def _get_patten_for_word(self, word: str):
-        return f'(\W|^){word}($|\W)'
+        return f"(\W|^){word}($|\W)"
 
     def _get_patten_for_case_insensitive(self, pattern: str):
-        return f'{pattern}//i'
-
+        return f"{pattern}//i"
 
     def _find_by_regex(self, pattern: str, target: str, additional_lines_number: int):
-        matches = regex.match(pattern=pattern, string=target)
+        matches = re.search(pattern=pattern, string=target)
         result = list()
-        for left, right in matches.spans(1):
+        while matches is not None:
+            left, right = matches.span()
             if additional_lines_number == 0:
                 result.append(target[left:right])
             else:
-                result.append("".join(target[left:].splitlines(keepends=True)[:right + 1]))
+                result.append(
+                    "".join(target[left:].splitlines(keepends=True)[: right + 1])
+                )
+            target = target[right:]
+            matches = re.search(pattern=pattern, string=target)
         return result
 
     @Executable._may_throw
@@ -55,17 +59,16 @@ class Grep(Executable):
         """
         pattern = self._init_pattern()
         lines_number = self.args.A
+        results = {}
         for file in self.args.tail:
             if isfile(file):
                 content = Grep._get_file_text(file)
-                self._find_by_regex(pattern, content, lines_number)
+                results[file] = self._find_by_regex(pattern, content, lines_number)
 
-        self.stdout = " ".join(self.arguments)
         self.ret_code = 0
 
     @staticmethod
     def _get_file_text(file_name):
-        with open(file_name, 'r') as content_file:
+        with open(file_name, "r") as content_file:
             content = content_file.read()
         return content
-
