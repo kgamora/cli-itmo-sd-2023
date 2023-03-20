@@ -79,16 +79,18 @@ class Grep(Executable):
             if isfile(file):
                 results[file] = self._find_by_regex(
                     pattern, Grep._get_file_text(file), lines_number
-                )[0]
+                )
             else:
                 self.stderr += file + " is not a valid file. \n"
-        for key in sorted(results):
-            text, (l, r) = results[key]
-            self.stdout += ": ".join((key, text))
+        for file in sorted(results):
+            for text, (_, _) in results[file]:
+                self.stdout += ": ".join((file, text))
 
         self.ret_code = 0
 
     @staticmethod
     def _get_file_text(file_name: str):
         with open(file_name, "r") as content_file:
-            yield content_file.readline()
+            for line in content_file:
+                yield line
+        return
