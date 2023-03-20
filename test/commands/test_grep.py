@@ -43,11 +43,6 @@ def test_search_word():
     grep.execute(None)
     remove_file()
     str_answer = "./capital.txt: Hyderabad Itanagar\n"
-    print("<"*100)
-    print(grep.stdout)
-    print(str_answer)
-    print("<"*100)
-
     assert str_answer == grep.stdout
 
 
@@ -57,7 +52,7 @@ def test_flag_i_word():
     grep.execute(None)
     remove_file()
     str_answer = """./capital.txt: Hyderabad Itanagar
-    ./capital.txt: Dispur Patna Raipur, itanagar"""
+./capital.txt: Dispur Patna Raipur, itanagar"""
     assert str_answer == grep.stdout
 
 
