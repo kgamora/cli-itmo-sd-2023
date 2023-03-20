@@ -34,7 +34,9 @@ class Grep(Executable):
     def _get_patten_for_case_insensitive(self, pattern: str):
         return f"{pattern}//i"
 
-    def _find_by_regex(self, pattern: str, target_lines, additional_lines_number: int) -> list[(str, (int, int))]:
+    def _find_by_regex(
+        self, pattern: str, target_lines, additional_lines_number: int
+    ) -> list[(str, (int, int))]:
         result, how_much_to_add = list(), list()
 
         for line in target_lines:
@@ -42,7 +44,7 @@ class Grep(Executable):
             for i, (match, (_, _)) in enumerate(result):
                 if how_much_to_add[i]:
                     how_much_to_add[i] -= 1
-                    match += f"\n{line}"
+                    match += line
 
             matches = re.search(pattern=pattern, string=line)
             if matches:
@@ -65,7 +67,9 @@ class Grep(Executable):
         results = {}
         for file in self.args.tail:
             if isfile(file):
-                results[file] = self._find_by_regex(pattern, Grep._get_file_text(file), lines_number)
+                results[file] = self._find_by_regex(
+                    pattern, Grep._get_file_text(file), lines_number
+                )
 
         self.ret_code = 0
 

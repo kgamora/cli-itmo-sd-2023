@@ -1,6 +1,5 @@
 import os
 
-from project.execution.commands.cat import Cat
 from project.execution.commands.grep import Grep
 
 
@@ -13,11 +12,9 @@ def teardown_module(module):
 
 
 FILE_NAME = "capital.txt"
-str_test: str = """
-                Hyderabad Itanagar\n
-                Dispur Patna Raipur, itanagar\n
-                Random Text Hello World\n
-                """
+str_test: str = """Hyderabad Itanagar
+Dispur Patna Raipur, itanagar
+Random Text Hello World"""
 
 
 def create_file():
@@ -50,8 +47,8 @@ def test_flag_i_word():
     grep = Grep(["-w", "itanagar", "-i", f"./{FILE_NAME}"])
     grep.execute(None)
     remove_file()
-    answer = """Hyderabad Itanagar\n
-                Dispur Patna Raipur, itanagar\n"""
+    answer = """Hyderabad Itanagar
+                Dispur Patna Raipur, itanagar"""
     assert str_test == grep.stdout
 
 
@@ -60,4 +57,6 @@ def test_flag_a_word():
     grep = Grep(["-w", "itanagar", "-i", "-A", "1", f"./{FILE_NAME}"])
     grep.execute(None)
     remove_file()
+
+    print(str_test)
     assert str_test == grep.stdout
