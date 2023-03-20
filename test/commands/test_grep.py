@@ -65,7 +65,7 @@ def test_flag_a_word():
     str_answer = """./capital.txt: Hyderabad Itanagar
 ./capital.txt: Dispur Patna Raipur, itanagar
 ./capital.txt: Random Text Hello World"""
-    print(">"*100)
+    print(">" * 100)
     print(grep.stdout)
-    print(">"*100)
+    print(">" * 100)
     assert str_answer == grep.stdout

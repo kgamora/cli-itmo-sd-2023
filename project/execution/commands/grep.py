@@ -11,8 +11,7 @@ class Grep(Executable):
         try:
             self.args = self._init_args()
         except SystemExit as se:
-            if se.code == 0:
-                self.os_asked_help = True
+            self.ret_code = se.code
         except CustomArgumentParser.ArgumentException as ex:
             self.stderr += str(ex) + "\n"
             self.ret_code = 2
@@ -85,10 +84,7 @@ class Grep(Executable):
         :param stdin: command input stream
         :return: None
         """
-        if self.os_asked_help:
-            self.ret_code = 0
-            return
-        if self.ret_code and self.ret_code > 0:
+        if self.ret_code:
             return
 
         pattern = self._init_pattern()
