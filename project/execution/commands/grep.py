@@ -7,23 +7,30 @@ from os.path import isfile
 class Grep(Executable):
     def __init__(self, arguments: list[str] | None = None):
         super().__init__(arguments)
-        self.args = self._init_args()
+        self.os_asked_help = False
+        try:
+            self.args = self._init_args()
+        except SystemExit as se:
+            if se.code == 0:
+                self.os_asked_help = True
+            else:
+                raise se
 
     def _init_args(self):
         parser = argparse.ArgumentParser()
         parser.add_argument("-w", default=None)
         parser.add_argument("-A", default=0)
         parser.add_argument("-i", action="store_const", default=None, const=True)
-        parser.add_argument("tail", metavar="N", type=str, nargs="+")
+        parser.add_argument("pattern", metavar="PATTERN", type=str)
+        parser.add_argument("files", metavar="FILES", type=str, nargs="+")
         return parser.parse_args(self.arguments)
 
     def _init_pattern(self):
-        pattern = ""
+        pattern: str
         if self.args.w is not None:
             pattern = self._get_patten_for_word(self.args.w)
         else:
-            pattern = self.args.tail[0]
-            self.args.tail = self.args.tail[1:]
+            pattern = self.args.pattern
         if self.args.i is not None:
             pattern = self._get_patten_for_case_insensitive(pattern)
         return pattern
@@ -35,7 +42,7 @@ class Grep(Executable):
         return f"{pattern}//i"
 
     def _find_by_regex(
-        self, pattern: str, target_lines, additional_lines_number: int
+            self, pattern: str, target_lines, additional_lines_number: int
     ) -> list[(str, (int, int))]:
         result, how_much_to_add = list(), list()
 
@@ -62,14 +69,19 @@ class Grep(Executable):
         :param stdin: command input stream
         :return: None
         """
+        if self.os_asked_help:
+            self.ret_code = 0
+            return
         pattern = self._init_pattern()
         lines_number = self.args.A
         results = {}
-        for file in self.args.tail:
+        for file in self.args.files:
             if isfile(file):
                 results[file] = self._find_by_regex(
                     pattern, Grep._get_file_text(file), lines_number
                 )[0]
+            else:
+                self.stderr += file + " is not a valid file. \n"
         for key in sorted(results):
             text, (l, r) = results[key]
             self.stdout += ": ".join((key, text))
