@@ -34,19 +34,22 @@ class Grep(Executable):
     def _get_patten_for_case_insensitive(self, pattern: str):
         return f"{pattern}//i"
 
-    def _find_by_regex(self, pattern: str, target, additional_lines_number: int):
-        matches = re.search(pattern=pattern, string=target)
-        result = list()
-        while matches is not None:
-            left, right = matches.span()
-            if additional_lines_number == 0:
-                result.append(target[left:right])
-            else:
-                result.append(
-                    "".join(target[left:].splitlines(keepends=True)[: right + 1])
-                )
-            target = target[right:]
-            matches = re.search(pattern=pattern, string=target)
+    def _find_by_regex(self, pattern: str, target_lines, additional_lines_number: int) -> list[(str, (int, int))]:
+        result, how_much_to_add = list(), list()
+
+        for line in target_lines:
+
+            for i, (match, (_, _)) in enumerate(result):
+                if how_much_to_add[i]:
+                    how_much_to_add[i] -= 1
+                    match += f"\n{line}"
+
+            matches = re.search(pattern=pattern, string=line)
+            if matches:
+                left, right = matches.span()
+                result.append((line, (left, right)))
+                how_much_to_add.append(additional_lines_number)
+
         return result
 
     @Executable._may_throw
