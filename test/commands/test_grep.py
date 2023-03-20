@@ -59,4 +59,4 @@ def test_flag_a_word():
     remove_file()
 
     print(str_test)
-    assert str_test == grep.stdout
+    assert grep.stdout == str_test

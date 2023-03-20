@@ -69,7 +69,10 @@ class Grep(Executable):
             if isfile(file):
                 results[file] = self._find_by_regex(
                     pattern, Grep._get_file_text(file), lines_number
-                )
+                )[0]
+        for key in sorted(results):
+            text, (l, r) = results[key]
+            self.stdout += ": ".join((key, text))
 
         self.ret_code = 0
 
