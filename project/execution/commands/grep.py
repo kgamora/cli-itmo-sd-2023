@@ -82,7 +82,7 @@ class Grep(Executable):
                     pattern, Grep._get_file_text(file), lines_number
                 )
             else:
-                self.stderr += file + " is not a valid file. \n"
+                self.stderr += "grep" + f" {file}: Это каталог\n"
         for file in sorted(results):
             for text, (_, _) in results[file]:
                 self.stdout += ": ".join((file, text))
