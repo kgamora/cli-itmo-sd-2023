@@ -68,14 +68,13 @@ class Grep(Executable):
 
         for line in target_lines:
             matches = re.search(pattern=pattern, string=line)
-            if matches is not None or current_accept > 0:
-                if matches is None and current_accept > 0:
-                    current_accept = 0 if not current_accept else current_accept - 1
-                    result.append((line, (0, 0)))
-                elif matches is not None:
-                    current_accept = additional_lines_number
-                    left, right = matches.span()
-                    result.append((line, (left, right)))
+            if matches:
+                current_accept = additional_lines_number
+                left, right = matches.span()
+                result.append((line, (left, right)))
+            elif current_accept > 0:
+                result.append((line, (0, 0)))
+                current_accept -= 1
         return result
 
     @Executable._may_throw
