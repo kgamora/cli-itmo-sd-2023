@@ -37,10 +37,10 @@ class Grep(Executable):
         return pattern
 
     def _get_patten_for_word(self, word: str):
-        return f"(\W|^){word}($|\W)"
+        return rf"(\W|^){word}($|\W)"
 
     def _get_patten_for_case_insensitive(self, pattern: str):
-        return f"{pattern}//i"
+        return rf"(?i){pattern}"
 
     def _find_by_regex(
         self, pattern: str, target_lines, additional_lines_number: int
@@ -95,3 +95,8 @@ class Grep(Executable):
             for line in content_file:
                 yield line
         return
+
+pattern = r'(?i)(\W|^)itanagar($|\W)'
+line = "Hyderabad Itanagar\n"
+print(re.search(pattern=pattern, string=line))
+
