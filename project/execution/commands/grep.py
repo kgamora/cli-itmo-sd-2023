@@ -45,21 +45,19 @@ class Grep(Executable):
     def _find_by_regex(
         self, pattern: str, target_lines, additional_lines_number: int
     ) -> list[(str, (int, int))]:
-        result, how_much_to_add = list(), list()
+        result = list()
+        current_accept = 0
 
         for line in target_lines:
-
-            for i, (match, (_, _)) in enumerate(result):
-                if how_much_to_add[i]:
-                    how_much_to_add[i] -= 1
-                    match += line
-
             matches = re.search(pattern=pattern, string=line)
-            if matches:
-                left, right = matches.span()
-                result.append((line, (left, right)))
-                how_much_to_add.append(additional_lines_number)
-
+            if matches or current_accept:
+                if not matches and current_accept:
+                    current_accept -= 1
+                    result.append((line, (0, 0)))
+                else:
+                    current_accept -= 1
+                    left, right = matches.span()
+                    result.append((line, (left, right)))
         return result
 
     @Executable._may_throw

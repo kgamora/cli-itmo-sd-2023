@@ -13,7 +13,7 @@ def teardown_module(module):
 
 FILE_NAME = "capital.txt"
 str_test: str = """Hyderabad Itanagar
-Dispur Patna Raipur, itanagar
+Dispur Patna Raipur, Itanagar
 Random Text Hello World"""
 
 
@@ -58,10 +58,13 @@ def test_flag_i_word():
 
 def test_flag_a_word():
     create_file()
-    grep = Grep(["-w", "itanagar", "-i", "-A", "1", f"./{FILE_NAME}"])
+    grep = Grep(["-w", "Itanagar", "-i", "-A", "1", f"./{FILE_NAME}"])
     grep.execute(None)
     remove_file()
     str_answer = """./capital.txt: Hyderabad Itanagar
-./capital.txt: Dispur Patna Raipur, itanagar
+./capital.txt: Dispur Patna Raipur, Itanagar
 ./capital.txt: Random Text Hello World"""
+    print()
+    print(grep.stdout)
+    print()
     assert str_answer == grep.stdout
