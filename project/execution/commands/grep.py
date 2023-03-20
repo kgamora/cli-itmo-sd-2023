@@ -1,5 +1,5 @@
 from project.execution.executable import Executable
-import argparse
+from project.parsing.custom_arg_parser import CustomArgumentParser
 import re
 from os.path import isfile
 
@@ -13,16 +13,31 @@ class Grep(Executable):
         except SystemExit as se:
             if se.code == 0:
                 self.os_asked_help = True
-            else:
-                raise se
+        except CustomArgumentParser.ArgumentException as ex:
+            self.stderr += str(ex) + "\n"
+            self.ret_code = 2
 
     def _init_args(self):
-        parser = argparse.ArgumentParser()
-        parser.add_argument("-w", action="store_const", default=None, const=True, help="searching words")
-        parser.add_argument("-A", default=0, type=int, help="how much lines show after matching")
-        parser.add_argument("-i", action="store_const", default=None, const=True, help="ignore case")
-        parser.add_argument("pattern", metavar="PATTERN", type=str, help="pattern to searching")
-        parser.add_argument("files", metavar="FILES", type=str, nargs="+", help="list of files to search at")
+        parser = CustomArgumentParser()
+        parser.add_argument(
+            "-w", action="store_const", default=None, const=True, help="searching words"
+        )
+        parser.add_argument(
+            "-A", default=0, type=int, help="how much lines show after matching"
+        )
+        parser.add_argument(
+            "-i", action="store_const", default=None, const=True, help="ignore case"
+        )
+        parser.add_argument(
+            "pattern", metavar="PATTERN", type=str, help="pattern to searching"
+        )
+        parser.add_argument(
+            "files",
+            metavar="FILES",
+            type=str,
+            nargs="+",
+            help="list of files to search at",
+        )
         parser.prog = "grep"
         return parser.parse_args(self.arguments)
 
@@ -32,18 +47,21 @@ class Grep(Executable):
             pattern = self._get_patten_for_word(self.args.pattern)
         else:
             pattern = self.args.pattern
-        if self.args.i is not None:
+        if self.args.i:
             pattern = self._get_patten_for_case_insensitive(pattern)
         return pattern
 
-    def _get_patten_for_word(self, word: str):
+    @staticmethod
+    def _get_patten_for_word(word: str):
         return rf"(\W|^){word}($|\W)"
 
-    def _get_patten_for_case_insensitive(self, pattern: str):
+    @staticmethod
+    def _get_patten_for_case_insensitive(pattern: str):
         return rf"(?i){pattern}"
 
+    @staticmethod
     def _find_by_regex(
-        self, pattern: str, target_lines, additional_lines_number: int
+        pattern: str, target_lines, additional_lines_number: int
     ) -> list[(str, (int, int))]:
         result = list()
         current_accept = 0
@@ -71,6 +89,9 @@ class Grep(Executable):
         if self.os_asked_help:
             self.ret_code = 0
             return
+        if self.ret_code > 0:
+            return
+
         pattern = self._init_pattern()
         lines_number = self.args.A
         results = {}
@@ -93,4 +114,3 @@ class Grep(Executable):
             for line in content_file:
                 yield line
         return
-
