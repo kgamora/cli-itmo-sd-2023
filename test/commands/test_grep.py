@@ -31,7 +31,10 @@ def test_easy_pattern():
     grep = Grep(["a", f"./{FILE_NAME}"])
     grep.execute(None)
     remove_file()
-    assert str_test == grep.stdout
+    str_answer: str = """./capital.txt: Hyderabad Itanagar
+./capital.txt: Dispur Patna Raipur, itanagar
+./capital.txt: Random Text Hello World"""
+    assert str_answer == grep.stdout
 
 
 def test_search_word():
@@ -39,7 +42,13 @@ def test_search_word():
     grep = Grep(["-w", "Hyderabad", f"./{FILE_NAME}"])
     grep.execute(None)
     remove_file()
-    assert "Hyderabad Itanagar\n" == grep.stdout
+    str_answer = "./capital.txt: Hyderabad Itanagar\n"
+    print("<"*100)
+    print(grep.stdout)
+    print(str_answer)
+    print("<"*100)
+
+    assert str_answer == grep.stdout
 
 
 def test_flag_i_word():
@@ -47,9 +56,9 @@ def test_flag_i_word():
     grep = Grep(["-w", "itanagar", "-i", f"./{FILE_NAME}"])
     grep.execute(None)
     remove_file()
-    answer = """Hyderabad Itanagar
-                Dispur Patna Raipur, itanagar"""
-    assert str_test == grep.stdout
+    str_answer = """./capital.txt: Hyderabad Itanagar
+    ./capital.txt: Dispur Patna Raipur, itanagar"""
+    assert str_answer == grep.stdout
 
 
 def test_flag_a_word():
@@ -57,6 +66,7 @@ def test_flag_a_word():
     grep = Grep(["-w", "itanagar", "-i", "-A", "1", f"./{FILE_NAME}"])
     grep.execute(None)
     remove_file()
-
-    print(str_test)
-    assert grep.stdout == str_test
+    str_answer = """./capital.txt: Hyderabad Itanagar
+./capital.txt: Dispur Patna Raipur, itanagar
+./capital.txt: Random Text Hello World"""
+    assert str_answer == grep.stdout
