@@ -18,17 +18,18 @@ class Grep(Executable):
 
     def _init_args(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument("-w", default=None)
-        parser.add_argument("-A", default=0)
-        parser.add_argument("-i", action="store_const", default=None, const=True)
-        parser.add_argument("pattern", metavar="PATTERN", type=str)
-        parser.add_argument("files", metavar="FILES", type=str, nargs="+")
+        parser.add_argument("-w", action="store_const", default=None, const=True, help="searching words")
+        parser.add_argument("-A", default=0, type=int, help="how much lines show after matching")
+        parser.add_argument("-i", action="store_const", default=None, const=True, help="ignore case")
+        parser.add_argument("pattern", metavar="PATTERN", type=str, help="pattern to searching")
+        parser.add_argument("files", metavar="FILES", type=str, nargs="+", help="list of files to search at")
+        parser.prog = "grep"
         return parser.parse_args(self.arguments)
 
     def _init_pattern(self):
         pattern: str
-        if self.args.w is not None:
-            pattern = self._get_patten_for_word(self.args.w)
+        if self.args.w:
+            pattern = self._get_patten_for_word(self.args.pattern)
         else:
             pattern = self.args.pattern
         if self.args.i is not None:
