@@ -88,7 +88,7 @@ class Grep(Executable):
         if self.os_asked_help:
             self.ret_code = 0
             return
-        if self.ret_code > 0:
+        if self.ret_code and self.ret_code > 0:
             return
 
         pattern = self._init_pattern()
