@@ -52,10 +52,10 @@ class Grep(Executable):
             matches = re.search(pattern=pattern, string=line)
             if matches or current_accept:
                 if not matches and current_accept:
-                    current_accept -= 1
+                    current_accept = 0 if not current_accept else current_accept - 1
                     result.append((line, (0, 0)))
-                else:
-                    current_accept -= 1
+                elif matches:
+                    current_accept = 0 if not current_accept else current_accept - 1
                     left, right = matches.span()
                     result.append((line, (left, right)))
         return result
