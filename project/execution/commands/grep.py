@@ -50,12 +50,12 @@ class Grep(Executable):
 
         for line in target_lines:
             matches = re.search(pattern=pattern, string=line)
-            if matches or current_accept:
-                if not matches and current_accept:
+            if matches is not None or current_accept > 0:
+                if matches is None and current_accept > 0:
                     current_accept = 0 if not current_accept else current_accept - 1
                     result.append((line, (0, 0)))
-                elif matches:
-                    current_accept = 0 if not current_accept else current_accept - 1
+                elif matches is not None:
+                    current_accept = additional_lines_number
                     left, right = matches.span()
                     result.append((line, (left, right)))
         return result
@@ -93,8 +93,4 @@ class Grep(Executable):
             for line in content_file:
                 yield line
         return
-
-pattern = r'(?i)(\W|^)itanagar($|\W)'
-line = "Hyderabad Itanagar\n"
-print(re.search(pattern=pattern, string=line))
 

@@ -58,7 +58,7 @@ def test_flag_i_word():
 
 def test_flag_a_word():
     create_file()
-    grep = Grep(["-w", "Itanagar", "-i", "-A", "0", f"./{FILE_NAME}"])
+    grep = Grep(["-w", "Itanagar", "-i", "-A", "1", f"./{FILE_NAME}"])
     grep.execute(None)
     remove_file()
     str_answer = """./capital.txt: Hyderabad Itanagar
