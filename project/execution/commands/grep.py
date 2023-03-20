@@ -42,7 +42,7 @@ class Grep(Executable):
         return f"{pattern}//i"
 
     def _find_by_regex(
-            self, pattern: str, target_lines, additional_lines_number: int
+        self, pattern: str, target_lines, additional_lines_number: int
     ) -> list[(str, (int, int))]:
         result, how_much_to_add = list(), list()
 
