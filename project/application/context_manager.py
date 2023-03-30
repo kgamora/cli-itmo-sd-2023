@@ -53,6 +53,7 @@ class ContextManager(metaclass=Singleton):
 
     def _clear(self):
         self.__var_map.clear()
+        self.__cwd = os.getcwd()
 
     def get_current_env(self) -> dict[str, str]:
         """
