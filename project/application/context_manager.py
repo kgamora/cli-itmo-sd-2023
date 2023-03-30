@@ -6,6 +6,22 @@ from project.utils.metaclasses import Singleton
 class ContextManager(metaclass=Singleton):
     def __init__(self):
         self.__var_map: dict[str, str] = {}
+        self.__cwd: str = os.getcwd()
+
+    def get_cwd(self) -> str:
+        """
+        Returns current working directory
+        :return: full path of current working directory
+        """
+        return self.__cwd
+
+    def set_cwd(self, new_cwd: str) -> None:
+        """
+        Sets current working directory
+        :param new_cwd: full path of new working directory
+        :return: None
+        """
+        self.__cwd = new_cwd
 
     # return environment variable
     def get_var(self, name_str) -> str:
