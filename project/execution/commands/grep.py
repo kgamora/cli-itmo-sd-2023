@@ -3,6 +3,8 @@ from project.parsing.custom_arg_parser import CustomArgumentParser
 import re
 from os.path import isfile
 
+from project.utils.fileutils import convert_to_abspath
+
 
 class Grep(Executable):
     class GrepException(Exception):
@@ -105,9 +107,10 @@ class Grep(Executable):
         lines_number = self.args.A
         results = {}
         for file in self.args.files:
-            if isfile(file):
+            abs_file = convert_to_abspath(file)
+            if isfile(abs_file):
                 results[file] = self._find_by_regex(
-                    pattern, Grep._get_file_text(file), lines_number
+                    pattern, Grep._get_file_text(abs_file), lines_number
                 )
             else:
                 self.stderr += "grep" + f" {file}: Это каталог\n"

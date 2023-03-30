@@ -1,5 +1,8 @@
 import os
 
+import pytest
+from project.application.context_manager import ContextManager
+
 from project.execution.commands.grep import Grep
 
 
@@ -36,6 +39,24 @@ def test_easy_pattern():
 ./capital.txt: Random Text Hello World"""
     assert str_answer == grep.stdout
 
+
+def test_with_relative_path():
+    test_dir = ContextManager().get_cwd() + os.path.sep + 'test_dir'
+    file_name = test_dir + os.path.sep + FILE_NAME
+    os.mkdir(test_dir)
+    with open(file_name, "w+") as file:
+        file.write(str_test)
+    
+    ContextManager().set_cwd(test_dir)
+    grep = Grep(["-w", "Hyderabad", f"./{FILE_NAME}"])
+    grep.execute(None)
+    ContextManager()._clear()
+    
+    os.remove(file_name)
+    os.rmdir(test_dir)
+    
+    str_answer = "capital.txt: Hyderabad Itanagar"
+    assert str_answer in grep.stdout
 
 def test_search_word():
     create_file()
