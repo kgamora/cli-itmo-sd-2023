@@ -1,11 +1,11 @@
-import os
+import os.path
 from project.application.context_manager import ContextManager
 
 
 def convert_to_abspath(path: str) -> str:
     """
-    Convert path to absolute path.
-    Relative path converts to absolute;
+    Convert any path to absolute path.
+    Relative path converts to absolute using current working directory from ContextManager;
     Path with home directory like "~/..." expands with home directory;
     Absolute path doesn't change.
     :param path: path to convert
