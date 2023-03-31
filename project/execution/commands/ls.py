@@ -20,7 +20,7 @@ class LS(Executable):
         if self.arguments == None:
             dir = ContextManager().get_cwd()
         else:
-            try: 
+            try:
                 dir = convert_to_abspath(stdin)
             except Exception as ex:
                 self.stderr += f"ls: cannot access '{dir}': No such file or directory\n"
@@ -28,8 +28,11 @@ class LS(Executable):
                 return
 
         self.stdout = ""
-        entries = [x.name + os_sep if x.is_dir() else x.name for x in scandir(convert_to_abspath(dir))]
-        entries = list(filter(lambda x: not x.startswith('.'), entries))
+        entries = [
+            x.name + os_sep if x.is_dir() else x.name
+            for x in scandir(convert_to_abspath(dir))
+        ]
+        entries = list(filter(lambda x: not x.startswith("."), entries))
         entries.sort(key=lambda v: v.upper())
 
         for e in entries:
