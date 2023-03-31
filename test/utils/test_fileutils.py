@@ -42,4 +42,4 @@ def test_absolute_with_double_dots():
 
 
 def test_absolute_with_dot():
-    assert abspath + "absolute" + sep + "dir" == convert_to_abspath(abspath + "absolute" + sep + "dir" + ".")
+    assert abspath + "absolute" + sep + "dir" == convert_to_abspath(abspath + "absolute" + sep + "dir" + sep + ".")

@@ -17,10 +17,11 @@ def teardown_module(module):
 def setup():
     # Set up code here
     print("Running setup before each test")
-    ContextManager()._clear()
     ContextManager().set_cwd(
         ContextManager().get_cwd() + os.path.sep + "test/resources/test_cd"
     )
+    yield
+    ContextManager()._clear()
 
 
 def test_one_dir():
@@ -49,6 +50,7 @@ def test_two_dots():
     assert prev == ContextManager().get_cwd()
     assert cd.stderr == ""
     assert cd.ret_code == 0
+
 
 def test_one_dot():
     prev = ContextManager().get_cwd()
