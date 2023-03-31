@@ -70,6 +70,6 @@ class Constructor:
 
     def _construct_grep(self, tokens: list[str]):
         return Grep(tokens)
-    
+
     def _construct_cd(self, tokens: list[str]):
         return CD(tokens)

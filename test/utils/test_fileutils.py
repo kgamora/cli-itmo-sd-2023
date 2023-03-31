@@ -7,6 +7,7 @@ import os
 abspath = os.path.abspath("/")
 sep = os.path.sep
 
+
 def setup_module(module):
     print("basic setup module")
     ContextManager().set_cwd(abspath + "test" + sep + "dir")
@@ -34,12 +35,18 @@ def test_absolute():
 
 
 def test_relative_to_home():
-    assert os.path.expanduser("~") + sep + "dir" == convert_to_abspath("~" + sep + "dir")
+    assert os.path.expanduser("~") + sep + "dir" == convert_to_abspath(
+        "~" + sep + "dir"
+    )
 
 
 def test_absolute_with_double_dots():
-    assert abspath + "absolute" == convert_to_abspath(abspath + "absolute" + sep + "dir" + sep + "..")
+    assert abspath + "absolute" == convert_to_abspath(
+        abspath + "absolute" + sep + "dir" + sep + ".."
+    )
 
 
 def test_absolute_with_dot():
-    assert abspath + "absolute" + sep + "dir" == convert_to_abspath(abspath + "absolute" + sep + "dir" + sep + ".")
+    assert abspath + "absolute" + sep + "dir" == convert_to_abspath(
+        abspath + "absolute" + sep + "dir" + sep + "."
+    )

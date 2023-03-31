@@ -21,9 +21,9 @@ class CD(Executable):
         if not self.arguments:
             self.ret_code = 0
             return
-       
+
         abs_path = convert_to_abspath(self.arguments[0])
-        
+
         if len(self.arguments) > 1:
             self.stderr += "Ожидался один аргумент\n"
             self.ret_code = 1

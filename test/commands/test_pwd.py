@@ -16,7 +16,6 @@ def test_1():
     assert pwd.ret_code == 0
 
 
-
 def test_relative():
     ContextManager().set_cwd(os.getcwd() + os.path.sep + "test")
     pwd = PWD()

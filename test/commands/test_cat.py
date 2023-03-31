@@ -35,21 +35,22 @@ def test_stdin():
     cat = Cat()
     cat.execute(stdin)
     assert stdin == cat.stdout
-    
+
+
 def test_with_relative_path():
-    test_dir = ContextManager().get_cwd() + os.path.sep + 'test_dir'
+    test_dir = ContextManager().get_cwd() + os.path.sep + "test_dir"
     file = test_dir + os.path.sep + FILE_NAME
     os.mkdir(test_dir)
     create_file(file)
-    
+
     ContextManager().set_cwd(test_dir)
     cat = Cat([FILE_NAME])
     cat.execute()
     ContextManager()._clear()
-    
+
     remove_file(file)
     os.rmdir(test_dir)
-    
+
     print(cat.stdout)
     assert str_test == cat.stdout
 

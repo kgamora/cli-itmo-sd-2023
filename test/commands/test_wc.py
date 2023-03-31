@@ -2,7 +2,9 @@ import os
 import pathlib
 import pytest
 import project
-from project.application.context_manager import ContextManager  # on import will print something from __init__ file
+from project.application.context_manager import (
+    ContextManager,
+)  # on import will print something from __init__ file
 from project.execution.commands.wc import *
 
 
@@ -38,14 +40,14 @@ def test_from_file():
 
 
 def test_from_relative_file():
-    test_dir = ContextManager().get_cwd() + os.path.sep + 'test/resources'
+    test_dir = ContextManager().get_cwd() + os.path.sep + "test/resources"
     ContextManager().set_cwd(test_dir)
     file_name = test_dir + os.path.sep + "capitals.txt"
     capitals: list[str] = ["Hyderabad", "Itanagar", "Dispur", "Patna", "Raipur"]
     with open(file_name, "w+") as file:
         for capital in capitals:
             file.write(capital)
-            
+
     wc = WC(["capitals.txt"])
     wc.execute("")
     ContextManager()._clear()

@@ -11,6 +11,6 @@ def convert_to_abspath(path: str) -> str:
     :param path: path to convert
     :return: Absolute path
     """
-    expanded_path = os.path.expanduser(path) # expand home dir
+    expanded_path = os.path.expanduser(path)  # expand home dir
     relative_to_cdw = os.path.join(ContextManager().get_cwd(), expanded_path)
     return os.path.abspath(relative_to_cdw)
