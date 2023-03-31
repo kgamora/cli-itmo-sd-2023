@@ -7,6 +7,7 @@ from project.execution.commands.echo import Echo
 from project.execution.commands.pwd import PWD
 from project.execution.commands.exit import Exit
 from project.execution.commands.grep import Grep
+from project.execution.commands.cd import CD
 
 
 class Constructor:
@@ -69,3 +70,6 @@ class Constructor:
 
     def _construct_grep(self, tokens: list[str]):
         return Grep(tokens)
+    
+    def _construct_cd(self, tokens: list[str]):
+        return CD(tokens)
