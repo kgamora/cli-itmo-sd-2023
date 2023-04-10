@@ -75,3 +75,10 @@ def test_not_dir():
     cd.execute("")
     assert cd.stderr != ""
     assert cd.ret_code != 0
+
+
+def test_no_params():
+    cd = CD()
+    cd.execute("")
+    assert os.path.expanduser("~") == ContextManager().get_cwd()
+    assert cd.ret_code == 0

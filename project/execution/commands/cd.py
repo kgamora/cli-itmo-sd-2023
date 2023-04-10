@@ -18,21 +18,22 @@ class CD(Executable):
         :return: None
         """
         self.stdout = ""
+        self.stderr = ""
+        self.ret_code = 0
         if not self.arguments:
-            self.ret_code = 0
-            return
-
-        abs_path = convert_to_abspath(self.arguments[0])
-
-        if len(self.arguments) > 1:
-            self.stderr += "Ожидался один аргумент\n"
-            self.ret_code = 1
-        elif not os.path.exists(abs_path):
-            self.stderr += f"Нет такого файла или директории: {self.arguments[0]}\n"
-            self.ret_code = 2
-        elif not os.path.isdir(abs_path):
-            self.stderr += f"Не директория: {self.arguments[0]}\n"
-            self.ret_code = 3
+            abs_path = os.path.expanduser("~")
         else:
+            abs_path = convert_to_abspath(self.arguments[0])
+
+            if len(self.arguments) > 1:
+                self.stderr += "Ожидался один аргумент\n"
+                self.ret_code = 1
+            elif not os.path.exists(abs_path):
+                self.stderr += f"Нет такого файла или директории: {self.arguments[0]}\n"
+                self.ret_code = 2
+            elif not os.path.isdir(abs_path):
+                self.stderr += f"Не директория: {self.arguments[0]}\n"
+                self.ret_code = 3
+
+        if self.ret_code == 0:
             ContextManager().set_cwd(abs_path)
-            self.ret_code = 0
