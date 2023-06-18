@@ -1,6 +1,7 @@
 import os
 
 from project.execution.executable import Executable
+from project.utils.fileutils import convert_to_abspath
 
 
 class WC(Executable):
@@ -42,14 +43,15 @@ class WC(Executable):
     def __get_info(self):
         output = []
         for argument in self.arguments:
-            if self.__is_file(argument):
-                count_new_line, count_words, size = self.__get_info_about_file(argument)
+            abs_file = convert_to_abspath(argument)
+            if self.__is_file(abs_file):
+                count_new_line, count_words, size = self.__get_info_about_file(abs_file)
                 self.total_line += count_new_line
                 self.total_word += count_words
                 self.total_byte += size
                 max_len = max(self.max_len, len(str(self.total_byte)))
                 output.append({"file": (count_new_line, count_words, size, argument)})
-            elif self.__is_dir(argument):
+            elif self.__is_dir(abs_file):
                 output.append({"dir": "wc:" + str(argument) + ": Это каталог"})
                 output.append({"file": (0, 0, 0, argument)})
             else:

@@ -1,4 +1,5 @@
 from project.execution.executable import Executable
+from project.utils.fileutils import convert_to_abspath
 
 
 class Cat(Executable):
@@ -17,6 +18,7 @@ class Cat(Executable):
             self.stdout += stdin
         else:
             for file_name in self.arguments:
+                file_name = convert_to_abspath(file_name)
                 with open(file_name) as file:
                     self.stdout += "".join([line for line in file])
         self.ret_code = 0

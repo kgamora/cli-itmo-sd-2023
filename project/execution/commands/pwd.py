@@ -1,4 +1,5 @@
 import os
+from project.application.context_manager import ContextManager
 
 from project.execution.executable import Executable
 
@@ -15,5 +16,5 @@ class PWD(Executable):
         :param stdin: command input stream
         :return: None
         """
-        self.stdout = os.getcwd()
+        self.stdout = ContextManager().get_cwd()
         self.ret_code = 0

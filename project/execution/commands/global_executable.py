@@ -23,6 +23,7 @@ class GlobalExecutor(Executable):
             capture_output=True,
             universal_newlines=True,
             env=ContextManager().get_current_env(),
+            cwd=ContextManager().get_cwd(),
         )
         self.ret_code, self.stdout, self.stderr = (
             completed_process.returncode,
