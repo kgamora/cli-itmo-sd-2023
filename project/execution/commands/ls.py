@@ -17,11 +17,11 @@ class LS(Executable):
         :param stdin: command input stream
         :return: None
         """
-        if self.arguments == None:
+        if self.arguments == None or len(self.arguments) == 0:
             dir = ContextManager().get_cwd()
         else:
             try:
-                dir = convert_to_abspath(stdin)
+                dir = convert_to_abspath(self.arguments[0])
             except Exception as ex:
                 self.stderr += f"ls: cannot access '{dir}': No such file or directory\n"
                 self.ret_code = 2

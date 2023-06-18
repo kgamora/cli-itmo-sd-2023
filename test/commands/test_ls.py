@@ -63,3 +63,24 @@ def test_dir_with_dirs():
     assert ls.ret_code == 0
     assert ls.stderr == ""
     assert ls.stdout == all_dirs
+
+
+def test_with_arg():
+    dir_name = get_local_dir_name("ls_test_dirs")
+    makedirs(dir_name)
+    subdirs = [str(i) for i in range(10)]
+    all_dirs = ""
+    for d in subdirs:
+        makedirs(dir_name + os_sep + d)
+        if len(all_dirs) != 0:
+            all_dirs += " "
+        all_dirs += d + os_sep
+
+    ls = LS([dir_name])
+    ls.execute()
+    for d in subdirs:
+        removedirs(dir_name + os_sep + d)
+
+    assert ls.ret_code == 0
+    assert ls.stderr == ""
+    assert ls.stdout == all_dirs
